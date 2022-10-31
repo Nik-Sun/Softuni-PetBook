@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetBook", "PetBook\PetBook.csproj", "{67CE31FF-018E-4B7F-85FF-E54FC814207B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{016DF556-9F2C-499B-AA36-C10350C2A921} = {016DF556-9F2C-499B-AA36-C10350C2A921}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetBook.Core", "PetBook.Core\PetBook.Core.csproj", "{016DF556-9F2C-499B-AA36-C10350C2A921}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67CE31FF-018E-4B7F-85FF-E54FC814207B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67CE31FF-018E-4B7F-85FF-E54FC814207B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67CE31FF-018E-4B7F-85FF-E54FC814207B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67CE31FF-018E-4B7F-85FF-E54FC814207B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{016DF556-9F2C-499B-AA36-C10350C2A921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016DF556-9F2C-499B-AA36-C10350C2A921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016DF556-9F2C-499B-AA36-C10350C2A921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016DF556-9F2C-499B-AA36-C10350C2A921}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC6E53FA-A152-4200-9FE5-FF96E4F18853}
+	EndGlobalSection
+EndGlobal

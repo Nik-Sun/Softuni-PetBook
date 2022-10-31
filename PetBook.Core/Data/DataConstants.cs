@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PetBook.Core.Data
+{
+    public class DataConstants
+    {
+        public static class UserConstants
+        {
+            public const int FirstNameMaxLength = 50;
+            public const int LastNameMaxLength = 50;
+        }
+        public static class PetConstants
+        {
+            public const int NameMaxLength = 20;
+            public const int DescriptionMaxLength = 5000; 
+        }
+        public static class CityConstants
+        {
+            public const int NameMaxLength = 100;
+        }
+        public static class BreedConstants
+        {
+            public const int NameMaxLength = 100;
+        }
+        public static class AddressConnstants
+        {
+            public const int AddressTextMaxLength = 200;
+        }
+    }
+}
