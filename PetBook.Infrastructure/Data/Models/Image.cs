@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetBook.Core.Data.Models
+namespace PetBook.Infrastructure.Data.Models
 {
     public class Image
     {

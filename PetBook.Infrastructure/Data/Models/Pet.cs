@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using static PetBook.Core.Data.DataConstants.PetConstants;
+using static PetBook.Infrastructure.Data.DataConstants.PetConstants;
 
-namespace PetBook.Core.Data.Models
+namespace PetBook.Infrastructure.Data.Models
 {
     public class Pet
     {

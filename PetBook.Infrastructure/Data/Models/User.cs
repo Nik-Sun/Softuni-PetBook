@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using static PetBook.Core.Data.DataConstants.UserConstants;
+using static PetBook.Infrastructure.Data.DataConstants.UserConstants;
 
-namespace PetBook.Core.Data.Models
+namespace PetBook.Infrastructure.Data.Models
 {
     public class User : IdentityUser
     {
@@ -16,11 +16,13 @@ namespace PetBook.Core.Data.Models
         public string LastName { get; set; } = null!;
         [ForeignKey(nameof(Address))]
         public int AddressId { get; set; }
+
         [Required]
+        [MaxLength(AddressMaxLength)]
         public Address Address { get; set; } = null!;
 
         public ICollection<Pet> Pets { get; set; }
-        [Required]
+        
         public Image Image { get; set; }
     }
 }

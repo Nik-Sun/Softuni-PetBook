@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetBook.Core.Data
+namespace PetBook.Infrastructure.Data
 {
     public class DataConstants
     {
@@ -12,6 +12,7 @@ namespace PetBook.Core.Data
         {
             public const int FirstNameMaxLength = 50;
             public const int LastNameMaxLength = 50;
+            public const int AddressMaxLength = 100;
         }
         public static class PetConstants
         {

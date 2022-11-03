@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static PetBook.Core.Data.DataConstants.CityConstants;
+using static PetBook.Infrastructure.Data.DataConstants.BreedConstants;
 
-namespace PetBook.Core.Data.Models
+namespace PetBook.Infrastructure.Data.Models
 {
-    public class City
+    public class Breed
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+        
     }
 }

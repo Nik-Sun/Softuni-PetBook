@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PetBook.Core.Data.Models;
+using PetBook.Core.Services;
+using PetBook.Infrastructure.Data.Models;
 using PetBook.Models.User;
 
 namespace PetBook.Controllers
@@ -9,11 +10,14 @@ namespace PetBook.Controllers
     {
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
+        private readonly IUserService userService;
         public UserController(SignInManager<User> _signInManager, 
-            UserManager<User> _userManager)
+            UserManager<User> _userManager,
+            IUserService _userService)
         {
             signInManager = _signInManager;
             userManager = _userManager;
+            userService = _userService;
         }
 
         [HttpGet]
@@ -45,10 +49,46 @@ namespace PetBook.Controllers
             ModelState.AddModelError("", "Something went wrong.");
             return View(model);
         }
-
-        public IActionResult Register()
+        [HttpGet]
+        public async Task<IActionResult> Register()
         {
+            var model = new RegisterViewModel();
+            model.Cities = await userService.GetCitiesAsync();
+            return View(model);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return View();
+            }
+
+            var user = new User()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Address = new Address()
+                {
+                    CityId = model.CityId,
+                    AddressText = model.Address
+                },
+                UserName = model.FirstName
+            };
+
+            var result = await userManager.CreateAsync(user);
+
+            if (result.Succeeded == false)
+            {
+                foreach (var err in result.Errors)
+                {
+                    ModelState.AddModelError("" , err.Description);
+                }
+            }
+            await signInManager.PasswordSignInAsync(user,model.Password,false,false);
+            return RedirectToAction("Home","Index");
         }
     }
 }

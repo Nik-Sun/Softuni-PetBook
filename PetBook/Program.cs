@@ -1,7 +1,9 @@
-using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
-using PetBook.Core.Data;
-using PetBook.Core.Data.Models;
+using PetBook.Infrastructure.Data;
+using PetBook.Core.Repositories;
+using PetBook.Core.Services;
+using PetBook.Infrastructure.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +13,12 @@ builder.Services.AddDbContext<PetBookDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<PetBookDbContext>();
-builder.Services.AddControllersWithViews();
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRepository, PetBookRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
