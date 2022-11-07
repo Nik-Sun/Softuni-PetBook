@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
 using PetBook.Models.User;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
 namespace PetBook.Controllers
@@ -99,6 +100,26 @@ namespace PetBook.Controllers
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index","Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                var user = await userService.FindUserByIdAsync(userId);
+                var currentUser = new UserFormViewModel()
+                {
+                    Address = user.Address,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Cities = await userService.GetCitiesAsync()
+                };
+                return View(currentUser);
+            }
+
+            return BadRequest();
         }
     }
 }

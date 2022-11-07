@@ -96,5 +96,13 @@ namespace PetBook.Core.Repositories
         /// </summary>
         /// <returns>Error code</returns>
         Task<int> SaveChangesAsync();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="search"></param>
+        /// <param name="includes"></param>
+        /// <returns></returns>
+        public IQueryable<T> AllReadonlyAndInclude<T>(Expression<Func<T, bool>> search, params string[] includes) where T : class;
     }
 }

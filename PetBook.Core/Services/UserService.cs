@@ -2,6 +2,7 @@
 using PetBook.Core.Data.Models.DTOs;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
+using PetBook.Infrastructure.Data.Models.DTOs;
 
 namespace PetBook.Core.Services
 {
@@ -12,6 +13,26 @@ namespace PetBook.Core.Services
         public UserService(IRepository _repo)
         {
             repo = _repo;
+        }
+
+        public async Task<UserDto> FindUserByIdAsync(string id)
+        {
+            var user = await repo.GetByIdAsync<User>(id);
+            var address = await repo.GetByIdAsync<Address>(user.AddressId);
+
+            if (user != null)
+            {
+                return new UserDto()
+                {
+                    Address = address.AddressText,
+                    Cities = await GetCitiesAsync(),
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+
+                };
+            }
+            throw new ArgumentException("id");
         }
 
         public async Task<ICollection<CityDTO>> GetCitiesAsync()
@@ -26,5 +47,7 @@ namespace PetBook.Core.Services
 
             return cities;
         }
+
+        
     }
 }

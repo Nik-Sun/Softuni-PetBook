@@ -6,27 +6,50 @@
     <title>@ViewData["Title"] - PetBook</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/PetBook.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/petbook.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/resources/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/resources/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-image">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetBook</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+        <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm py-3 py-lg-0 px-3 px-lg-0">
+            <a class="navbar-brand ms-lg-5" asp-controller="Home" asp-action="Index">
+                <h1 class="m-0 text-uppercase text-dark bi bi-shop fs-1 text-primary me-3">PetBook</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <a asp-controller="Home" asp-action="Index" class="nav-item nav-link">Home</a>
+                    @if (User?.Identity?.IsAuthenticated ?? false)
+                    {
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Service</a>
+                        <a href="product.html" class="nav-item nav-link">Product</a>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu m-0">
+                               <a class="dropdown-item" asp-controller="User" asp-action="Profile">Your profile</a>
+                                <a href="team.html" class="dropdown-item">Add pet</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="blog.html" class="dropdown-item">Blog Grid</a>
+                                <a asp-controller="User" asp-action="Logout" class="dropdown-item">Logout</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-controller="User" asp-action="Login" class="nav-item nav-link">Login</a>
+                        <a asp-controller="User" asp-action="Register" class="nav-item nav-link">Register</a>
+                    }
+                  
+                    
                 </div>
             </div>
         </nav>
@@ -37,14 +60,31 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - PetBook - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+  <footer class="border-top border-bottom footer text-muted">
+        
+        <div class="container-fluid bg-dark text-white-50 py-4">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-md-0">&copy; <a class="text-white" href="#">Your Site Name</a>. All Rights Reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <p class="mb-0">Designed by <a class="text-white" href="https://htmlcodex.com">HTML Codex</a></p>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!-- Footer End -->
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/resources/lib/easing/easing.min.js"></script>
+    <script src="~/resources/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/resources/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="~/resources/js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

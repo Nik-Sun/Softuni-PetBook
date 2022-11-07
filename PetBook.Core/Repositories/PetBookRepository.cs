@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetBook.Infrastructure.Data;
+using PetBook.Infrastructure.Data.Models;
 using System.Linq.Expressions;
 
 namespace PetBook.Core.Repositories
@@ -174,6 +175,19 @@ namespace PetBook.Core.Repositories
         {
             var entities = All<T>(deleteWhereClause);
             DeleteRange(entities);
+        }
+
+        public IQueryable<T> AllReadonlyAndInclude<T>(Expression<Func<T, bool>> search, params string[] includes) where T : class
+        {
+           var tree = this.DbSet<T>()
+                .Where(search)
+                .AsNoTracking();
+
+            foreach (var item in includes)
+            {
+                tree.Include(item);
+            }
+            return tree;
         }
     }
 }
