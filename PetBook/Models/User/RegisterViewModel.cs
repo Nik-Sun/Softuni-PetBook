@@ -5,15 +5,16 @@ namespace PetBook.Models.User
 {
     public class RegisterViewModel
     {
-        [Required(AllowEmptyStrings = false)]
-        [StringLength(50, MinimumLength = 2)]
+        [Required(AllowEmptyStrings = false,ErrorMessage = "field is required.")]
+        [StringLength(50, MinimumLength = 2,ErrorMessage = "must be between 2 and 50 symbols.")]
         public string FirstName { get; set; } = null!;
 
-        [Required(AllowEmptyStrings = false)]
-        [StringLength(50, MinimumLength = 2)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "field is required.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "must be between 2 and 50 symbols.")]
         public string LastName { get; set; } = null!;
 
         [EmailAddress]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "field is required.")]
         public string Email { get; set; } = null!;
 
         [Required(AllowEmptyStrings = false)]

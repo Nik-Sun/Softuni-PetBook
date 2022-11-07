@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
 using PetBook.Models.User;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PetBook.Controllers
 {
@@ -60,9 +61,10 @@ namespace PetBook.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            model.Cities = await userService.GetCitiesAsync();
             if (ModelState.IsValid == false)
             {
-                return View();
+                return View(model);
             }
 
             var user = new User()
@@ -78,7 +80,7 @@ namespace PetBook.Controllers
                 UserName = model.FirstName
             };
 
-            var result = await userManager.CreateAsync(user);
+            var result = await userManager.CreateAsync(user,model.Password);
 
             if (result.Succeeded == false)
             {
@@ -86,9 +88,17 @@ namespace PetBook.Controllers
                 {
                     ModelState.AddModelError("" , err.Description);
                 }
+                return View(model);
             }
             await signInManager.PasswordSignInAsync(user,model.Password,false,false);
-            return RedirectToAction("Home","Index");
+            return RedirectToAction("Index","Home");
+
+            
+        }
+        public async Task< IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index","Home");
         }
     }
 }

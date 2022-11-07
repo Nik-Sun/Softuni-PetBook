@@ -23,6 +23,8 @@ namespace PetBook.Infrastructure.Data.Models
 
         public ICollection<Pet> Pets { get; set; }
         
-        public Image Image { get; set; }
+        public int? ImageId { get; set; }
+
+        public Image? Image { get; set; }
     }
 }

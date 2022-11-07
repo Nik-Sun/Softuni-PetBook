@@ -13,7 +13,12 @@ builder.Services.AddDbContext<PetBookDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<User>(options => 
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireNonAlphanumeric = false;
+    
+})
     .AddEntityFrameworkStores<PetBookDbContext>();
 
 builder.Services.AddControllersWithViews();

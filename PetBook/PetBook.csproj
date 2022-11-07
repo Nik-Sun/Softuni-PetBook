@@ -22,4 +22,8 @@
     <ProjectReference Include="..\PetBook.Infrastructure\PetBook.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\resources\" />
+  </ItemGroup>
+
 </Project>
