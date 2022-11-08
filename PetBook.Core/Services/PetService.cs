@@ -1,4 +1,5 @@
 ﻿using PetBook.Core.Data.Models.DTOs;
+using PetBook.Core.Models.Pets;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
 using System;
@@ -16,6 +17,39 @@ namespace PetBook.Core.Services
         {
             repo = _repo;
         }
+
+        public async Task AddPetAsync(PetFormModel model)
+        {
+            var pet = new Pet()
+            {
+                Name = model.Name,
+                Age = model.Age,
+                BreedId = model.BreedId,
+                Description = model.Description,
+                Height = model.Height,
+                Weight = model.Weight,
+                OwnerId = model.OwnerId,
+                
+            };
+          
+
+            foreach (var img in model.Images)
+            {
+                string path = Path.GetFullPath($"{AppDomain.CurrentDomain.BaseDirectory}/../../../../PetBook.Infrastructure/Images/PetImages/{Guid.NewGuid()}.jpg");
+                using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                {
+                    await img.CopyToAsync(stream);
+                }
+                pet.Images.Add(new Image()
+                {
+                    Url = path
+                });
+            }
+
+            await repo.AddAsync(pet);
+            await repo.SaveChangesAsync();
+        }
+
         public IEnumerable<BreedDto> GetBreeds()
         {
             var breeds = repo.AllReadonly<Breed>()

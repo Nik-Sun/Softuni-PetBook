@@ -1,11 +1,9 @@
-﻿using PetBook.Infrastructure.Data.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-using static PetBook.Infrastructure.Data.DataConstants.PetConstants;
+﻿using Microsoft.AspNetCore.Http;
 using PetBook.Core.Data.Models.DTOs;
+using System.ComponentModel.DataAnnotations;
+using static PetBook.Infrastructure.Data.DataConstants.PetConstants;
 
-namespace PetBook.Models.Pets
+namespace PetBook.Core.Models.Pets
 {
     public class PetFormModel
     {
@@ -33,9 +31,10 @@ namespace PetBook.Models.Pets
 
         public int BreedId { get; set; }
 
-        public IEnumerable<BreedDto> Breeds { get; set; }
+        public IEnumerable<BreedDto>? Breeds { get; set; }
 
-        public string OwnerId { get; set; } = null!;
+        
+        public string? OwnerId { get; set; } = null!;
 
         public List<IFormFile> Images { get; set; }
     }

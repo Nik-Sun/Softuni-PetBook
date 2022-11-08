@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetBook.Core", "PetBook.Cor
 		{C7A13280-328B-495E-8995-DBFBF500D6B8} = {C7A13280-328B-495E-8995-DBFBF500D6B8}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetBook.Infrastructure", "PetBook.Infrastructure\PetBook.Infrastructure.csproj", "{C7A13280-328B-495E-8995-DBFBF500D6B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetBook.Infrastructure", "PetBook.Infrastructure\PetBook.Infrastructure.csproj", "{C7A13280-328B-495E-8995-DBFBF500D6B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

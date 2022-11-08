@@ -7,6 +7,12 @@ namespace PetBook.Infrastructure.Data.Models
 {
     public class Pet
     {
+
+        public Pet()
+        {
+            Images = new List<Image>();
+        }
+
         [Key]
         public Guid Id { get; set; }
 

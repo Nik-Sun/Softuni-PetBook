@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Images\UserImages\" />
+    <Folder Include="Images\PetImages\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

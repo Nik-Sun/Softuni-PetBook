@@ -1,8 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
-using PetBook.Infrastructure.Data;
 using PetBook.Core.Repositories;
 using PetBook.Core.Services;
+using PetBook.Infrastructure.Data;
 using PetBook.Infrastructure.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);

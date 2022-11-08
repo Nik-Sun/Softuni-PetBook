@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PetBook.Core.Models.User;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
-using PetBook.Models.User;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 
 namespace PetBook.Controllers
 {

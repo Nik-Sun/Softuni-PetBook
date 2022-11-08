@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PetBook.Models.User
+namespace PetBook.Core.Models.User
 {
     public class LoginViewModel
     {

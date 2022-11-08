@@ -1,4 +1,5 @@
 ﻿using PetBook.Core.Data.Models.DTOs;
+using PetBook.Core.Models.Pets;
 
 namespace PetBook.Core.Services
 {

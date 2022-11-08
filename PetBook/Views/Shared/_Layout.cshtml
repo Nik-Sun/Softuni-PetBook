@@ -31,11 +31,11 @@
                     {
                         <a href="about.html" class="nav-item nav-link">About</a>
                         <a href="service.html" class="nav-item nav-link">Service</a>
-                        <a href="product.html" class="nav-item nav-link">Product</a>
+                        <a asp-controller="Pet" asp-action="Browse" class="nav-item nav-link">Browse pets</a>
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
                             <div class="dropdown-menu m-0">
-                               <a class="dropdown-item" asp-controller="User" asp-action="Profile">Your profile</a>
+                                <a class="dropdown-item" asp-controller="User" asp-action="Profile">Your profile</a>
                                 <a asp-controller="Pet" asp-action="Add" class="dropdown-item">Add pet</a>
                                 <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                 <a href="blog.html" class="dropdown-item">Blog Grid</a>
@@ -48,20 +48,20 @@
                         <a asp-controller="User" asp-action="Login" class="nav-item nav-link">Login</a>
                         <a asp-controller="User" asp-action="Register" class="nav-item nav-link">Register</a>
                     }
-                  
-                    
+
+
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+    
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
+    
 
-  <footer class="border-top border-bottom footer text-muted">
-        
+    <footer class="border-top border-bottom footer text-muted">
+
         <div class="container-fluid bg-dark text-white-50 py-4">
             <div class="container">
                 <div class="row g-5">

@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetBook.Core\PetBook.Core.csproj" />
-    <ProjectReference Include="..\PetBook.Infrastructure\PetBook.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

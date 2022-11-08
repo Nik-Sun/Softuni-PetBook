@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetBook.Core.Data.Models.DTOs;
+using PetBook.Core.Models.User;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
-using PetBook.Infrastructure.Data.Models.DTOs;
 
 namespace PetBook.Core.Services
 {
@@ -15,14 +15,14 @@ namespace PetBook.Core.Services
             repo = _repo;
         }
 
-        public async Task<UserDto> FindUserByIdAsync(string id)
+        public async Task<UserFormViewModel> FindUserByIdAsync(string id)
         {
             var user = await repo.GetByIdAsync<User>(id);
             var address = await repo.GetByIdAsync<Address>(user.AddressId);
 
             if (user != null)
             {
-                return new UserDto()
+                return new UserFormViewModel()
                 {
                     Address = address.AddressText,
                     Cities = await GetCitiesAsync(),

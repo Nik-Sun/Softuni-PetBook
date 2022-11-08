@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using PetBook.Core.Data.Models.DTOs;
 using PetBook.Infrastructure.Data.Configuration;
 using PetBook.Infrastructure.Data.Models;
 
