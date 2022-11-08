@@ -24,6 +24,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepository, PetBookRepository>();
+builder.Services.AddScoped<IPetService, PetService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

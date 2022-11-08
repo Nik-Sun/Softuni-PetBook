@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PetBook.Infrastructure.Data;
-using PetBook.Infrastructure.Data.Models;
 using System.Linq.Expressions;
 
 namespace PetBook.Core.Repositories

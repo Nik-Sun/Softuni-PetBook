@@ -33,10 +33,10 @@
                         <a href="service.html" class="nav-item nav-link">Service</a>
                         <a href="product.html" class="nav-item nav-link">Product</a>
                         <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Hello @User.Identity?.Name!</a>
                             <div class="dropdown-menu m-0">
                                <a class="dropdown-item" asp-controller="User" asp-action="Profile">Your profile</a>
-                                <a href="team.html" class="dropdown-item">Add pet</a>
+                                <a asp-controller="Pet" asp-action="Add" class="dropdown-item">Add pet</a>
                                 <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                 <a href="blog.html" class="dropdown-item">Blog Grid</a>
                                 <a asp-controller="User" asp-action="Logout" class="dropdown-item">Logout</a>
