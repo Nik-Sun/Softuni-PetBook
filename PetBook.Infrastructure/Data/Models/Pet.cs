@@ -42,6 +42,8 @@ namespace PetBook.Infrastructure.Data.Models
         [Required]
         public User Owner { get; set; }
 
+        public bool IsMale { get; set; }
+
         public ICollection<Image> Images { get; set; }
     }
 }

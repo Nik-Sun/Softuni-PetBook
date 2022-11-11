@@ -25,5 +25,10 @@
         {
             public const int AddressTextMaxLength = 200;
         }
+        public static class MinioBuckets
+        {
+            public const string PetBucket = "pet-images";
+            public const string UserBucket = "user-images";
+        }
     }
 }

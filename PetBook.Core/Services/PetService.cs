@@ -1,21 +1,21 @@
-﻿using PetBook.Core.Data.Models.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using PetBook.Core.Data.Models.DTOs;
+using PetBook.Core.Models.Common;
 using PetBook.Core.Models.Pets;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PetBook.Core.Services
 {
     public class PetService : IPetService
     {
         private readonly IRepository repo;
-        public PetService(IRepository _repo)
+        private readonly IImageService imageService;
+        public PetService(IRepository _repo
+            ,IImageService _imageService)
         {
             repo = _repo;
+            imageService = _imageService;
         }
 
         public async Task AddPetAsync(PetFormModel model)
@@ -29,25 +29,49 @@ namespace PetBook.Core.Services
                 Height = model.Height,
                 Weight = model.Weight,
                 OwnerId = model.OwnerId,
-                
+                IsMale = model.IsMale,
             };
-          
+
 
             foreach (var img in model.Images)
             {
-                string path = Path.GetFullPath($"{AppDomain.CurrentDomain.BaseDirectory}/../../../../PetBook.Infrastructure/Images/PetImages/{Guid.NewGuid()}.jpg");
-                using (var stream = new FileStream(path, FileMode.Create, FileAccess.Write))
+                using (var stream =img.OpenReadStream())
                 {
-                    await img.CopyToAsync(stream);
+                    var path = await imageService.Upload("pet-images",stream);
+                    pet.Images.Add(new Image()
+                    {
+                        Url = path
+                    });
                 }
-                pet.Images.Add(new Image()
-                {
-                    Url = path
-                });
+               
             }
 
             await repo.AddAsync(pet);
             await repo.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PetViewModel>> GetAll(int pageNumber = 1)
+        {
+            int take = 6;
+            int skip = (take * pageNumber) - take;
+
+            var pets = repo.AllReadonly<Pet>()
+                  .Include(p => p.Owner)
+                  .Skip(skip)
+                  .Take(take)
+                  .Select(p => new PetViewModel()
+                  {
+                      Id = p.Id,
+                      Owner = $"{p.Owner.FirstName} {p.Owner.LastName}",
+                      Name = p.Name,
+                      IsMale=p.IsMale,
+                      Images = p.Images.Select(i => new ImageViewModel()
+                      {
+                          Id = i.Id.ToString(),
+                          Url = i.Url
+                      }).ToList(),
+                  });
+            return await pets.ToListAsync();
         }
 
         public IEnumerable<BreedDto> GetBreeds()

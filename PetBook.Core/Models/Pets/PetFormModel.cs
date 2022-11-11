@@ -28,6 +28,8 @@ namespace PetBook.Core.Models.Pets
         [Range(1,25)]
         public int Age { get; set; }
 
+        [Required]
+        public bool IsMale { get; set; }
 
         public int BreedId { get; set; }
 
@@ -36,6 +38,7 @@ namespace PetBook.Core.Models.Pets
         
         public string? OwnerId { get; set; } = null!;
 
+        
         public List<IFormFile> Images { get; set; }
     }
 }

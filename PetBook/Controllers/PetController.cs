@@ -39,7 +39,8 @@ namespace PetBook.Controllers
 
         public async Task<IActionResult> Browse()
         {
-            return View();
+            var pets = await petService.GetAll();
+            return View(pets);
         }
     }
 }

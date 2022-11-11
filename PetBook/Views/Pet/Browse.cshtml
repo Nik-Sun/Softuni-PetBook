@@ -1,15 +1,42 @@
-﻿<div class="container col-4">
-    <div class="card">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/184.webp" class="card-img-top" alt="Fissure in Sandstone" />
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#!" class="btn btn-primary">Button</a>
-        </div>
+﻿@model IEnumerable<PetViewModel>
+
+<div class="py-5">
+
+    <div class="container">
+        <div class="row hidden-md-up">
+            @if (Model.Count() == 0)
+            {
+                <h2 class="align-content-center">No Pets added yet!</h2>
+            }
+            @foreach (var pet in Model)
+            {
+                <div class="col-md-4">
+                    <div class="team-item">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid w-100" src="@pet.Images[0].Url" alt="pet-image">
+                            <div class="team-overlay">
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-twitter"></i></a>
+                                    <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-facebook"></i></a>
+                                    <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-light text-center p-4">
+                            <h5 class="text-uppercase">@pet.Name</h5>
+                            <h5 class="text-uppercase fw-bold">@(pet.IsMale ? Html.Raw("&#9794 Boy") : Html.Raw("&#9792 Girl"))</h5>
+                            <p class="m-0">Owner: @pet.Owner</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div><br>
     </div>
+
+
 </div>
 
 
 @section Scripts{
     @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>*@
-}
+    }
