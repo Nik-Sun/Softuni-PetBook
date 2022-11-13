@@ -16,7 +16,7 @@
                             <img class="img-fluid w-100" src="@pet.Images[0].Url" alt="pet-image">
                             <div class="team-overlay">
                                 <div class="d-flex align-items-center justify-content-start">
-                                    <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-twitter"></i></a>
+                                    <a class="btn btn-light btn-square mx-1" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id"><i class="bi bi-twitter"></i></a>
                                     <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-facebook"></i></a>
                                     <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-linkedin"></i></a>
                                 </div>

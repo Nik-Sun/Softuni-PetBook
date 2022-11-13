@@ -85,5 +85,60 @@ namespace PetBook.Core.Services
 
             return breeds;
         }
+
+        public async Task<PetDetailViewModel> GetPetById(string id)
+        {
+            var petId = Guid.Parse(id);
+            var pet = await repo.All<Pet>().Where(p => p.Id == petId)
+                .Include(o => o.Owner)
+                .Include(b => b.Breed)
+                .Include(i => i.Images)
+                .FirstOrDefaultAsync();
+            if (pet == null)
+            {
+                throw new ArgumentException("Id");
+            }
+            return new PetDetailViewModel()
+            {
+                Name = pet.Name,
+                Images = pet.Images.Select(i => new ImageViewModel()
+                {
+                    Url = i.Url,
+                    Id = i.Id.ToString(),
+                }).ToList(),
+                Owner = $"{pet.Owner.FirstName} {pet.Owner.LastName}",
+                IsMale = pet.IsMale,
+                Description = pet.Description,
+                Breed = pet.Breed.Name,
+                OwnerId = pet.OwnerId,
+                Size = GetSize(pet.Weight),
+                Id = pet.Id,
+            };
+        }
+
+
+        private string GetSize(double w)
+        {
+            if (w<5.5)
+            {
+                return "Toy";
+            }
+            else if (w>= 5.5 && w< 10)
+            {
+                return "Small";
+            }
+            else if (w>=10 && w < 26)
+            {
+                return "Medium";
+            }
+            else if (w>=26 && w<45)
+            {
+                return "Large";
+            }
+            else
+            {
+                return "Giant";
+            }
+        }
     }
 }

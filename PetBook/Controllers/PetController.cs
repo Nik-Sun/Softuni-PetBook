@@ -42,5 +42,12 @@ namespace PetBook.Controllers
             var pets = await petService.GetAll();
             return View(pets);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            var model = await petService.GetPetById(id);
+            return View(model);
+        }
     }
 }

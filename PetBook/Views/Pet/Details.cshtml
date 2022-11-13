@@ -1,0 +1,54 @@
+﻿@model PetDetailViewModel
+
+<script>
+   
+</script>
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Portfolio Item Heading -->
+    <h1 class="my-4">
+        @Model.Name
+        <small>@(Model.IsMale ? Html.Raw("&#9794 Boy") : Html.Raw("&#9792 Girl"))</small>
+    </h1>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+        <div class="col-md-8">
+            <img id="main" class="img-fluid" src="@Model.Images[0].Url" alt="pet-image">
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="my-3">About @Model.Name</h3>
+            <p>@Model.Description</p>
+            <h3 class="my-3">Project Details</h3>
+            <ul>
+                <li>@Model.Size</li>
+                <li>@Model.Breed</li>
+                <li>@Model.Owner</li>
+            </ul>
+        </div>
+
+    </div>
+    <!-- /.row -->
+    <!-- Related Projects Row -->
+    <h3 class="my-4">More images of @Model.Name</h3>
+
+    <div class="row">
+        @for (int i = 1; i < Model.Images.Count; i++)
+        {
+            <div class="col-md-3 col-sm-6 mb-lg-4 my-class">
+                <a>
+                    <img onmousedown="loadImage(event)" class="img-fluid" src="@Model.Images[i].Url" alt="pet-image">
+                </a>
+            </div>
+        }
+
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
