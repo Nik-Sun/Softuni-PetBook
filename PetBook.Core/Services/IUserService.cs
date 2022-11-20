@@ -7,5 +7,7 @@ namespace PetBook.Core.Services
     {
         public Task<ICollection<CityDTO>> GetCitiesAsync();
         public Task<UserFormViewModel> FindUserByIdAsync(string id);
+
+
     }
 }

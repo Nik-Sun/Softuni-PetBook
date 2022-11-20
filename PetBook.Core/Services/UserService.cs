@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetBook.Core.Data.Models.DTOs;
-using PetBook.Core.Models.Pets;
 using PetBook.Core.Models.User;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;

@@ -1,8 +1,7 @@
-﻿@model PetDetailViewModel
+﻿@using System.Security.Claims
+@model PetDetailViewModel
 
-<script>
-   
-</script>
+
 
 <!-- Page Content -->
 <div class="container">
@@ -24,11 +23,19 @@
             <h3 class="my-3">About @Model.Name</h3>
             <p>@Model.Description</p>
             <h3 class="my-3">Project Details</h3>
-            <ul>
-                <li>@Model.Size</li>
-                <li>@Model.Breed</li>
-                <li>@Model.Owner</li>
-            </ul>
+            <form method="post" asp-action="Inbox" asp-controller="Message">
+                <ul>
+                    <li>@Model.Size</li>
+                    <li>@Model.Breed</li>
+                    <li>@Model.Owner</li>
+                </ul>
+                @if (Model.OwnerId != User?.FindFirstValue(ClaimTypes.NameIdentifier))
+                {
+                    <input type="hidden" asp-for="OwnerId" name="ownerId" />
+                    <button type="submit">Message @Model.Owner</button>
+                }
+
+            </form>
         </div>
 
     </div>

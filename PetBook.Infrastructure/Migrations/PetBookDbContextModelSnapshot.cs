@@ -4919,6 +4919,39 @@ namespace PetBook.Infrastructure.Migrations
                     b.ToTable("Image");
                 });
 
+            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RecieverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecieverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Message");
+                });
+
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Pet", b =>
                 {
                     b.Property<Guid>("Id")
@@ -5117,6 +5150,25 @@ namespace PetBook.Infrastructure.Migrations
                         .HasForeignKey("PetId");
                 });
 
+            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Message", b =>
+                {
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Reciever")
+                        .WithMany("RecievedMessages")
+                        .HasForeignKey("RecieverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Reciever");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Pet", b =>
                 {
                     b.HasOne("PetBook.Infrastructure.Data.Models.Breed", "Breed")
@@ -5161,6 +5213,10 @@ namespace PetBook.Infrastructure.Migrations
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.User", b =>
                 {
                     b.Navigation("Pets");
+
+                    b.Navigation("RecievedMessages");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

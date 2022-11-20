@@ -28,6 +28,28 @@ namespace PetBook.Infrastructure.Data
                .Property(p => p.Weight)
                .HasColumnType("decimal(5,2)");
 
+          
+
+            builder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMessages)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Message>()
+               .HasOne(m => m.Reciever)
+               .WithMany(u => u.RecievedMessages)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            //builder.Entity<User>()
+            //    .HasMany(u => u.Chats)
+            //    .WithOne(c => c.Author)
+            //    .OnDelete(DeleteBehavior.NoAction);
+
+            //builder.Entity<Chat>()
+            //    .HasOne(u => u.Recipient)
+            //    .WithMany(c => c.Chats)
+            //    .OnDelete(DeleteBehavior.NoAction);
+
             builder.ApplyConfiguration(new BreedConfiguration());
 
             builder.ApplyConfiguration(new CityConfiguration());

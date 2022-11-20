@@ -2,6 +2,10 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+import { html } from '../lib/lit-html/lit-html.js';
+export { html };
+
+
 function loadImage(event) {
     event.preventDefault()
     let mainEl = document.getElementById('main');

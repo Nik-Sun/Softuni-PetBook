@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetBook.Core.Repositories;
 using PetBook.Core.Services;
+using PetBook.Hubs;
 using PetBook.Infrastructure.Data;
 using PetBook.Infrastructure.Data.Models;
 
@@ -23,9 +24,10 @@ builder.Services.AddDefaultIdentity<User>(options =>
     
 })
     .AddEntityFrameworkStores<PetBookDbContext>();
-
+builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IRepository, PetBookRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IImageService, ImageService>();
@@ -55,5 +57,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.MapHub<ChatHub>("/Message/Chats");
 
 app.Run();
