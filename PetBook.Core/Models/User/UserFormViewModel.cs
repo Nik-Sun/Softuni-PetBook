@@ -1,4 +1,5 @@
-﻿using PetBook.Core.Data.Models.DTOs;
+﻿using Microsoft.AspNetCore.Http;
+using PetBook.Core.Data.Models.DTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace PetBook.Core.Models.User
@@ -24,5 +25,7 @@ namespace PetBook.Core.Models.User
 
         [MaxLength(100)]
         public string Address { get; set; } = null!;
+
+        public IFormFile? ProfilePicture { get; set; }
     }
 }

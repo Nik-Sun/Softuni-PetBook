@@ -23,7 +23,7 @@
             <h3 class="my-3">About @Model.Name</h3>
             <p>@Model.Description</p>
             <h3 class="my-3">Project Details</h3>
-            <form method="post" asp-action="Inbox" asp-controller="Message">
+            <form method="post" asp-action="Chat" asp-controller="Message">
                 <ul>
                     <li>@Model.Size</li>
                     <li>@Model.Breed</li>
@@ -31,7 +31,7 @@
                 </ul>
                 @if (Model.OwnerId != User?.FindFirstValue(ClaimTypes.NameIdentifier))
                 {
-                    <input type="hidden" asp-for="OwnerId" name="ownerId" />
+                    <input type="hidden" asp-for="OwnerId" name="recipientId" />
                     <button type="submit">Message @Model.Owner</button>
                 }
 

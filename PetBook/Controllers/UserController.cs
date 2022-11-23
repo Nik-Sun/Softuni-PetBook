@@ -1,9 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using PetBook.Core.Models.Common;
 using PetBook.Core.Models.User;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
+using System;
+using System.IO;
+using System.Net.Sockets;
 using System.Security.Claims;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PetBook.Controllers
 {
@@ -12,13 +19,16 @@ namespace PetBook.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly UserManager<User> userManager;
         private readonly IUserService userService;
-        public UserController(SignInManager<User> _signInManager, 
+        private readonly IImageService imageService;
+        public UserController(SignInManager<User> _signInManager,
             UserManager<User> _userManager,
-            IUserService _userService)
+            IUserService _userService,
+            IImageService _imageService)
         {
             signInManager = _signInManager;
             userManager = _userManager;
             userService = _userService;
+            imageService = _imageService;
         }
 
         [HttpGet]
@@ -35,16 +45,16 @@ namespace PetBook.Controllers
                 return View(model);
             }
             var user = await userManager.FindByEmailAsync(model.Email);
-            if(user == null)
+            if (user == null)
             {
-                ModelState.AddModelError("","Invalid Email or Password.");
+                ModelState.AddModelError("", "Invalid Email or Password.");
                 return View(model);
             }
 
-            var result = await signInManager.PasswordSignInAsync(user.UserName,model.Password,false,false);
+            var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
 
             ModelState.AddModelError("", "Something went wrong.");
@@ -80,25 +90,25 @@ namespace PetBook.Controllers
                 UserName = model.FirstName
             };
 
-            var result = await userManager.CreateAsync(user,model.Password);
+            var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded == false)
             {
                 foreach (var err in result.Errors)
                 {
-                    ModelState.AddModelError("" , err.Description);
+                    ModelState.AddModelError("", err.Description);
                 }
                 return View(model);
             }
-            await signInManager.PasswordSignInAsync(user,model.Password,false,false);
-            return RedirectToAction("Index","Home");
+            await signInManager.PasswordSignInAsync(user, model.Password, false, false);
+            return RedirectToAction("Index", "Home");
 
-            
+
         }
-        public async Task< IActionResult> Logout()
+        public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
         [HttpGet]
         public async Task<IActionResult> Profile()
@@ -119,6 +129,18 @@ namespace PetBook.Controllers
             }
 
             return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
+        {
+
+            
+            using (var reader = image.OpenReadStream())
+            {
+                string url = await imageService.Upload("temp", reader);
+                return Ok(JsonConvert.SerializeObject(url));
+            }
+
         }
     }
 }

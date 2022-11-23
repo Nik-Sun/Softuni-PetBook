@@ -4,10 +4,10 @@
     {
         public ChatModel()
         {
-            Users = new Dictionary<string, string>();
+            Users = new List<ChatUsersModel>();
         }
         public string CurrentUserId { get; set; }
-        public IDictionary<string,string> Users { get; set; }
+        public ICollection<ChatUsersModel> Users { get; set; }
 
     }
 }

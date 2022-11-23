@@ -2,8 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-import { html } from '../lib/lit-html/lit-html.js';
-export { html };
+
 
 
 function loadImage(event) {
@@ -16,5 +15,41 @@ function loadImage(event) {
     mainEl.src = clickedUrl;
     clickedEl.src = mainUrl;
     console.log('end')
+}
 
+function uploadImage() {
+    let inputEl = document.getElementById('profile-pic-upload');
+    inputEl.click();
+    inputEl.onchange = (function (e) {
+        let file = e.target.files[0];
+
+        reader = new FileReader()
+
+        let fd = new FormData();
+        fd.append('image', file);
+
+
+        
+        
+        fetch('https://localhost:7156/User/UpdateProfilePicture', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                
+            },
+            body:fd
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                document.getElementById('profile-pic').src = data
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+
+
+
+
+    })
 }

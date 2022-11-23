@@ -13,6 +13,7 @@ connection.on("ReceiveMessage", function (message) {
     let recipientId = document.getElementById('senderId').value;
     var messageHtml;
     let element = document.createElement('div');
+    //TODO: Sanitize HTML
     if (message.recipientId == recipientId) {
         element.classList.add('chat-message-right', 'pb-4');
         messageHtml = ` <div>
@@ -42,7 +43,11 @@ connection.on("ReceiveMessage", function (message) {
     element.innerHTML = messageHtml;
     console.log(message);
    
-    document.querySelector('.chat-messages').appendChild(element);
+    
+    let chatWindowEl = document.querySelector('.chat-messages');
+    let chatWindowHeight = chatWindowEl.scrollHeight
+    chatWindowEl.appendChild(element);
+    chatWindowEl.scrollTo(0, chatWindowHeight)
 
 });
 
@@ -56,9 +61,11 @@ connection.start().then(function () {
 
 document.getElementById("sendBtn").addEventListener("click", function (event) {
     let recipientId = document.getElementById('senderId').value;
-    let message = document.getElementById('messageBox').value;
+    let message = document.getElementById('messageBox');
     console.log(recipientId,message)
-    connection.invoke("SendMessage",recipientId,message).catch(e => console.log(e))
+    connection.invoke("SendMessage",recipientId,message.value).catch(e => console.log(e))
    
     event.preventDefault();
+    message.value = '';
+  
 });

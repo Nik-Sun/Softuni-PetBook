@@ -30,10 +30,13 @@ namespace PetBook.Hubs
                 IsRead = false
 
             };
+            
+
             string name = Context?.User?.Identity?.Name ?? "";
             string? recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
                 .Select(u => $"{u.FirstName} {u.LastName}")
                 .FirstOrDefaultAsync();
+
             var model = new MessageModel()
             {
                 RecipientId = recipientId,
@@ -43,6 +46,8 @@ namespace PetBook.Hubs
                 Content = messageText,
             };
             await Clients.Users(recipientId,currentUserId).SendAsync("ReceiveMessage", model);
+            await repo.AddAsync(message);
+            await repo.SaveChangesAsync();
         }
     }
 }
