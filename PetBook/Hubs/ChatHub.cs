@@ -18,24 +18,46 @@ namespace PetBook.Hubs
             repo = _repo;
         }
 
-        public async Task SendMessage(string recipientId,string messageText)
+
+        public override async Task OnConnectedAsync()
+        {
+            await repo.AddAsync<ActiveConnection>(new ActiveConnection
+            {
+                UserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                ConnectionId = Context.ConnectionId
+            });
+            
+            await repo.SaveChangesAsync();
+            await Groups.AddToGroupAsync(Context.ConnectionId,Context.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            await base.OnConnectedAsync();
+        }
+
+        public async Task SendMessage(string recipientId, string messageText)
         {
             var currentUserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
             var message = new Message()
             {
                 SenderId = currentUserId,
                 RecieverId = recipientId,
                 Content = messageText,
-                CreatedOn = DateTime.UtcNow,
-                IsRead = false
-
+                CreatedOn = DateTime.UtcNow
             };
-            
+            bool isUserOnline = repo.AllReadonly<ActiveConnection>(ac => ac.UserId == recipientId).Any();
+            if (isUserOnline)
+            {
+                message.IsRead = true;
+            }
 
             string name = Context?.User?.Identity?.Name ?? "";
-            string? recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
+            var recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
                 .Select(u => $"{u.FirstName} {u.LastName}")
-                .FirstOrDefaultAsync();
+                .FirstAsync();
+
+            string? senderImageUrl = await repo.AllReadonly<User>(u => u.Id == currentUserId)
+                .Include(u => u.Image)
+                .Select(u => u.Image.Url)
+                .FirstAsync();
 
             var model = new MessageModel()
             {
@@ -44,10 +66,28 @@ namespace PetBook.Hubs
                 SenderName = name,
                 RecipientName = recipientName,
                 Content = messageText,
+                SenderProfileImageUrl = senderImageUrl
+
             };
-            await Clients.Users(recipientId,currentUserId).SendAsync("ReceiveMessage", model);
+            if (Context.i)
+            {
+                Groups.AddToGroupAsync();
+            }
+            
+            await Clients.Groups(recipientId,currentUserId).SendAsync("ReceiveMessage", model);
+            //await Clients.Users(recipientId, currentUserId).SendAsync("ReceiveMessage", model);
             await repo.AddAsync(message);
             await repo.SaveChangesAsync();
+        }
+
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            var connection = await repo.All<ActiveConnection>(c => c.ConnectionId == Context.ConnectionId)
+                .FirstOrDefaultAsync();
+            await repo.DeleteAsync<ActiveConnection>(connection.Id);
+            await repo.SaveChangesAsync();
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }

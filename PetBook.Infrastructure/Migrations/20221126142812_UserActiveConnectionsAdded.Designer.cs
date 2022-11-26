@@ -12,8 +12,8 @@ using PetBook.Infrastructure.Data;
 namespace PetBook.Infrastructure.Migrations
 {
     [DbContext(typeof(PetBookDbContext))]
-    [Migration("20221116165728_MessagesAdded")]
-    partial class MessagesAdded
+    [Migration("20221126142812_UserActiveConnectionsAdded")]
+    partial class UserActiveConnectionsAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,6 +159,29 @@ namespace PetBook.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.ActiveConnection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConnectionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActiveConnection");
                 });
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Address", b =>
@@ -4931,23 +4954,25 @@ namespace PetBook.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Sender")
+                    b.Property<string>("RecieverId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("SenderId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RecieverId");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Message");
                 });
@@ -5023,7 +5048,7 @@ namespace PetBook.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ImageId")
+                    b.Property<int>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -5068,7 +5093,8 @@ namespace PetBook.Infrastructure.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -5132,6 +5158,17 @@ namespace PetBook.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.ActiveConnection", b =>
+                {
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "User")
+                        .WithMany("ActiveConnections")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Address", b =>
                 {
                     b.HasOne("PetBook.Infrastructure.Data.Models.City", "City")
@@ -5152,9 +5189,21 @@ namespace PetBook.Infrastructure.Migrations
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Message", b =>
                 {
-                    b.HasOne("PetBook.Infrastructure.Data.Models.User", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId");
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Reciever")
+                        .WithMany("RecievedMessages")
+                        .HasForeignKey("RecieverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Reciever");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Pet", b =>
@@ -5185,8 +5234,10 @@ namespace PetBook.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("PetBook.Infrastructure.Data.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
+                        .WithOne()
+                        .HasForeignKey("PetBook.Infrastructure.Data.Models.User", "ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
 
@@ -5200,9 +5251,13 @@ namespace PetBook.Infrastructure.Migrations
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.User", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("ActiveConnections");
 
                     b.Navigation("Pets");
+
+                    b.Navigation("RecievedMessages");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

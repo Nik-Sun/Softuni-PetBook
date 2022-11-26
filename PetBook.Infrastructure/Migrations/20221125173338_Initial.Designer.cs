@@ -12,8 +12,8 @@ using PetBook.Infrastructure.Data;
 namespace PetBook.Infrastructure.Migrations
 {
     [DbContext(typeof(PetBookDbContext))]
-    [Migration("20221116213700_MessageCreatedOnAdded")]
-    partial class MessageCreatedOnAdded
+    [Migration("20221125173338_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -4937,24 +4937,19 @@ namespace PetBook.Infrastructure.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Sender")
+                    b.Property<string>("RecieverId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SenderId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RecieverId");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Message");
                 });
@@ -5030,7 +5025,7 @@ namespace PetBook.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("ImageId")
+                    b.Property<int>("ImageId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -5075,7 +5070,8 @@ namespace PetBook.Infrastructure.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("ImageId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -5159,9 +5155,21 @@ namespace PetBook.Infrastructure.Migrations
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Message", b =>
                 {
-                    b.HasOne("PetBook.Infrastructure.Data.Models.User", null)
-                        .WithMany("Messages")
-                        .HasForeignKey("UserId");
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Reciever")
+                        .WithMany("RecievedMessages")
+                        .HasForeignKey("RecieverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("PetBook.Infrastructure.Data.Models.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Reciever");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Pet", b =>
@@ -5192,8 +5200,10 @@ namespace PetBook.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("PetBook.Infrastructure.Data.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
+                        .WithOne()
+                        .HasForeignKey("PetBook.Infrastructure.Data.Models.User", "ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
 
@@ -5207,9 +5217,11 @@ namespace PetBook.Infrastructure.Migrations
 
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.User", b =>
                 {
-                    b.Navigation("Messages");
-
                     b.Navigation("Pets");
+
+                    b.Navigation("RecievedMessages");
+
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

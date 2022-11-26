@@ -10,5 +10,6 @@ namespace PetBook.Core.Services
     public interface IImageService
     {
         public Task<string> Upload(string bucketName, Stream data);
+        public Task Delete(string bucketName, string imageName);
     }
 }

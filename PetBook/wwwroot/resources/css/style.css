@@ -335,7 +335,7 @@
     z-index: 1;
 }
 
-.team-carousel .owl-nav .owl-prev,
+/*.team-carousel .owl-nav .owl-prev,
 .team-carousel .owl-nav .owl-next {
     position: relative;
     width: 50px;
@@ -353,7 +353,7 @@
 .team-carousel .owl-nav .owl-prev:hover,
 .team-carousel .owl-nav .owl-next:hover {
     color: var(--dark);
-}
+}*/
 
 .team-item img {
     transition: .5s;
@@ -370,7 +370,7 @@
     bottom: 45px;
     left: 45px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     background: rgba(122, 183, 48, .8);
     transition: .5s;

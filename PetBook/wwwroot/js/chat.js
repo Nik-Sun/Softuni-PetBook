@@ -8,16 +8,16 @@ document.getElementById("sendBtn").disabled = true;
 
 
 connection.on("ReceiveMessage", function (message) {
-    console.log('invoked')
-    console.log(message)
-    let recipientId = document.getElementById('senderId').value;
-    var messageHtml;
+   
+    let recipientId = document.getElementById('recipient-id').value;
+    let senderId = document.getElementById('senderId').value;
+    let messageHtml;
     let element = document.createElement('div');
     //TODO: Sanitize HTML
-    if (message.recipientId == recipientId) {
+    if (message.senderId == senderId) {
         element.classList.add('chat-message-right', 'pb-4');
         messageHtml = ` <div>
-                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                <img src="${message.senderProfileImageUrl}" class="rounded-circle mr-1" alt="${message.senderName}" width="40" height="40">
                                 <div class="text-muted small text-nowrap mt-2">2:34 am</div>
                             </div>
                             <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
@@ -28,7 +28,7 @@ connection.on("ReceiveMessage", function (message) {
     else {
         element.classList.add('chat-message-left', 'pb-4');
         messageHtml = ` <div>
-                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                <img src="${message.senderProfileImageUrl}" class="rounded-circle mr-1" alt="${message.senderName}" width="40" height="40">
                                 <div class="text-muted small text-nowrap mt-2">2:34 am</div>
                             </div>
                             <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
@@ -60,7 +60,7 @@ connection.start().then(function () {
 });
 
 document.getElementById("sendBtn").addEventListener("click", function (event) {
-    let recipientId = document.getElementById('senderId').value;
+    let recipientId = document.getElementById('recipient-id').value;
     let message = document.getElementById('messageBox');
     console.log(recipientId,message)
     connection.invoke("SendMessage",recipientId,message.value).catch(e => console.log(e))

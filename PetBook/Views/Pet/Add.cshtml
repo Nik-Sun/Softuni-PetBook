@@ -25,12 +25,12 @@
                                 <label asp-for="IsMale">My pet is a girl.</label>
                             </div>
                             <div class="form-outline mb-4">
-                                <input type="text" class="form-control" asp-for="Age" />
+                                <input type="number" class="form-control" asp-for="Age" />
                                 <label class="form-label" asp-for="Age">The age of your pet</label>
                                 <span asp-validation-for="Age" class="text-danger"></span>
                             </div>
                             <div class="form-outline mb-4">
-                                <textarea type="te" class="form-control" asp-for="Description"></textarea>
+                                <textarea class="form-control" asp-for="Description"></textarea>
                                 <label class="form-label" asp-for="Description">Write something about your pet</label>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>

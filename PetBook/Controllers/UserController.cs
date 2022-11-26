@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PetBook.Core.Models.Common;
 using PetBook.Core.Models.User;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
-using System;
-using System.IO;
-using System.Net.Sockets;
 using System.Security.Claims;
-using System.Text;
 using static System.Net.Mime.MediaTypeNames;
+using static PetBook.Infrastructure.Data.DataConstants.UserConstants;
 
 namespace PetBook.Controllers
 {
@@ -71,9 +67,10 @@ namespace PetBook.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            model.Cities = await userService.GetCitiesAsync();
+            
             if (ModelState.IsValid == false)
             {
+                model.Cities = await userService.GetCitiesAsync();
                 return View(model);
             }
 
@@ -87,7 +84,11 @@ namespace PetBook.Controllers
                     CityId = model.CityId,
                     AddressText = model.Address
                 },
-                UserName = model.FirstName
+                UserName = model.FirstName,
+                Image =new Infrastructure.Data.Models.Image()
+                {
+                    Url = DefaultImageUrl
+                }
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
@@ -119,16 +120,30 @@ namespace PetBook.Controllers
                 var user = await userService.FindUserByIdAsync(userId);
                 var currentUser = new UserFormViewModel()
                 {
+                    Id = userId,
                     Address = user.Address,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    Cities = await userService.GetCitiesAsync()
+                    Cities = await userService.GetCitiesAsync(),
+                    ProfilePictureUrl = user.ProfilePictureUrl
+                    
                 };
                 return View(currentUser);
             }
 
             return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserFormViewModel model)
+        {
+            if (ModelState.IsValid == false)
+            {
+                model.Cities = await userService.GetCitiesAsync();
+                return View(model);
+            }
+            await userService.UpdateUser(model);
+            return RedirectToAction(nameof(Profile));
         }
         [HttpPost]
         public async Task<IActionResult> UpdateProfilePicture(IFormFile image)

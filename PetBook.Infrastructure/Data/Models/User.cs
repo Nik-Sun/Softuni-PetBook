@@ -11,7 +11,7 @@ namespace PetBook.Infrastructure.Data.Models
         public User()
         {
             Pets = new List<Pet>();
-           
+
         }
         [Required]
         [MaxLength(FirstNameMaxLength)]
@@ -27,12 +27,14 @@ namespace PetBook.Infrastructure.Data.Models
         public Address Address { get; set; } = null!;
 
         public ICollection<Pet> Pets { get; set; }
-       
-       public ICollection<Message> SentMessages { get; set; }
-       public ICollection<Message> RecievedMessages { get; set; }
-       
-        public int? ImageId { get; set; }
 
-        public Image? Image { get; set; }
+        public ICollection<Message> SentMessages { get; set; }
+        public ICollection<Message> RecievedMessages { get; set; }
+
+        public int ImageId { get; set; }
+
+        public Image Image { get; set; }
+
+        public ICollection<ActiveConnection>? ActiveConnections { get; set; }
     }
 }

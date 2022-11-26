@@ -193,6 +193,32 @@ namespace PetBook.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SenderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RecieverId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_RecieverId",
+                        column: x => x.RecieverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Message_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pets",
                 columns: table => new
                 {
@@ -203,7 +229,8 @@ namespace PetBook.Infrastructure.Migrations
                     Height = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
                     Age = table.Column<int>(type: "int", nullable: false),
                     BreedId = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsMale = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1389,7 +1416,8 @@ namespace PetBook.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_ImageId",
                 table: "AspNetUsers",
-                column: "ImageId");
+                column: "ImageId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -1402,6 +1430,16 @@ namespace PetBook.Infrastructure.Migrations
                 name: "IX_Image_PetId",
                 table: "Image",
                 column: "PetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_RecieverId",
+                table: "Message",
+                column: "RecieverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_SenderId",
+                table: "Message",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pets_BreedId",
@@ -1470,6 +1508,9 @@ namespace PetBook.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Message");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

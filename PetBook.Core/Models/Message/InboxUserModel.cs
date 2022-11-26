@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace PetBook.Core.Models.Message
 {
-    public class ChatUsersModel
+    public class InboxUserModel
     {
         public string UserId { get; set; }
         public string UserName { get; set; }
+        public string UserProfilePictureUrl { get; set; }
+        public int UnreadMessagesFromUser { get; set; }
     }
 }

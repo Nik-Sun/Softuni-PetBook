@@ -1,13 +1,22 @@
-﻿namespace PetBook.Core.Models.Message
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PetBook.Core.Models.Message
 {
     public class ChatModel
     {
         public ChatModel()
         {
-            Users = new List<ChatUsersModel>();
+            SentMessages = new List<MessageModel>();
+            RecievedMessages = new List<MessageModel>();
         }
-        public string CurrentUserId { get; set; }
-        public ICollection<ChatUsersModel> Users { get; set; }
+        public ICollection<MessageModel> SentMessages  { get; set; }
+        public ICollection<MessageModel> RecievedMessages { get; set; }
 
+        public string SenderId { get; set; }
+        public string RecipientId { get; set; }
     }
 }

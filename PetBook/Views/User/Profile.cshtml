@@ -1,63 +1,73 @@
 ﻿@model UserFormViewModel
 <div class="container rounded bg-white mt-5 mb-5">
-    <div class="row">
-        <div class="col-md-3 border-right">
-           <input id="profile-pic-upload" type="file" style="display:none" asp-for="ProfilePicture"/>
-            <div onclick="uploadImage(event)" class="container-profilepic card overflow-hidden d-flex flex-column align-items-center text-center p-3 py-5">
-                @*<div class="photo-preview card-img w-100 h-100">*@
-                <img id="profile-pic" class="photo-preview card-img" width="150" src="http://localhost:9000/user-images/Snimka.jpg">
-                @*</div>*@
-                <div class="middle-profilepic text-center card-img-overlay d-none flex-column justify-content-center">
-                    <div class="text-profilepic text-success">
-                        <i class="fas fa-camera"></i>
-                        <div class="text-profilepic">Click to change your Profile picture</div>
+    <form method="post" enctype="multipart/form-data">
+        <input id="profile-pic-upload" type="file" style="display:none" name="ProfilePicture" asp-for="ProfilePicture" />
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div onclick="uploadImage()" class="col-md-3 border-right">
+               
+                <div class="container-profilepic card overflow-hidden d-flex flex-column align-items-center text-center p-3 py-5">
+                    @*<div class="photo-preview card-img w-100 h-100">*@
+                    <img id="profile-pic" class="photo-preview card-img" width="150" src="@Model.ProfilePictureUrl">
+                    @*</div>*@
+                    <div class="middle-profilepic text-center card-img-overlay d-none flex-column justify-content-center">
+                        <div class="text-profilepic text-success">
+                            <i class="fas fa-camera"></i>
+                            <div class="text-profilepic">Click to change your Profile picture</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <span class="font-weight-bold">@Model.FirstName @Model.LastName</span>
+                    <span class="text-black-50">@Model.Email</span>
+                    <span> </span>
+                </div>
+
+
+            </div>
+            <div class="col-md-9 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-right">Profile Settings</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label class="labels">Name</label><input asp-for="FirstName" type="text" class="form-control" placeholder="first name" value="@Model.FirstName"></div>
+                        <div class="col-md-6"><label class="labels">Last Name</label><input asp-for="LastName" type="text" class="form-control" value="@Model.LastName" placeholder="last name"></div>
+                    </div>
+                    <div class="row mt-3">
+
+                        <div class="col-md-6"><label class="labels">Address</label><input asp-for="Address" type="text" class="form-control" placeholder="enter address line 1" value="@Model.Address"></div>
+                        <div class="col-md-6"><label class="labels">Email</label><input asp-for="Email" type="text" class="form-control" placeholder="enter email" value="@Model.Email"></div>
+
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <select class="labels form-select">
+                                Country
+                                @foreach (var item in Model.Cities)
+                                {
+                                    <option value="@item.Id" type="text" class="form-control" placeholder="country">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                        @*<div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>*@
+                    </div>
+                    <div class="mt-5 text-center">
+                        <button class="btn btn-primary profile-button" type="submit">Save Profile</button>
+                    </div>
+                    <div class="row mt-3 text-center">
+                        <span class="text-danger" style="display:none">Your profile picture will not be saved until you press "Save profile" button</span>
                     </div>
                 </div>
             </div>
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <span class="font-weight-bold">@Model.FirstName @Model.LastName</span>
-                <span class="text-black-50">@Model.Email</span>
-                <span> </span>
-            </div>
-            
-
-        </div>
-        <div class="col-md-9 border-right">
+            @* <div class="col-md-4">
             <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6"><label class="labels">Name</label><input asp-for="FirstName" type="text" class="form-control" placeholder="first name" value="@Model.FirstName"></div>
-                    <div class="col-md-6"><label class="labels">Last Name</label><input asp-for="LastName" type="text" class="form-control" value="@Model.LastName" placeholder="last name"></div>
-                </div>
-                <div class="row mt-3">
-
-                    <div class="col-md-6"><label class="labels">Address</label><input asp-for="Address" type="text" class="form-control" placeholder="enter address line 1" value="@Model.Address"></div>
-                    <div class="col-md-6"><label class="labels">Email</label><input asp-for="Email" type="text" class="form-control" placeholder="enter email" value="@Model.Email"></div>
-
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <select class="labels form-select">
-                            Country
-                            @foreach (var item in Model.Cities)
-                            {
-                                <option value="@item.Id" type="text" class="form-control" placeholder="country">@item.Name</option>
-                            }
-                        </select>
-                    </div>
-                    @*<div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>*@
-                </div>
-                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+            <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+            <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
+            <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
             </div>
+            </div>*@
         </div>
-        @* <div class="col-md-4">
-        <div class="p-3 py-5">
-        <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
-        <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
-        <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
-        </div>
-        </div>*@
-    </div>
+    </form>
+    
 </div>

@@ -126,3 +126,7 @@ body {
     display: flex !important;
     cursor: pointer;
 }
+#profile-pic{
+    height:300px;
+    width:300px
+}

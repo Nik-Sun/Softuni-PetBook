@@ -1,33 +1,38 @@
 ﻿@using System.Security.Claims
-@model IEnumerable<MessageModel>
+@model ChatModel
 
 
 <div class="container p-0">
-    @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-    {
-    <input id="senderId" type="hidden" value="@Model.First().SenderId" />
-    }
-    else
-    {
-        <input id="senderId" type="hidden" value="@Model.First().RecipientId" />
-    }
+    
+    <input id="senderId" type="hidden" value="@Model.SenderId" />
+    <input id="recipient-id" type="hidden" value="@Model.RecipientId" />
     
     <div class="col-12 col-lg-7 col-xl-9">
         <div class="py-2 px-4 border-bottom d-none d-lg-block">
             <div class="d-flex align-items-center py-1">
                 <div class="position-relative">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                    <img src="@Model.RecievedMessages.First().RecipientProfileImageUrl" class="rounded-circle mr-1" alt="@Model.SentMessages.First().RecipientName" width="40" height="40">
+                  @*  @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    {
+                        <img src="@Model.First().SenderProfileImageUrl" class="rounded-circle mr-1" alt="@Model.First().SenderName" width="40" height="40">
+                    }
+                    else
+                    {
+                        <img src="@Model.First().RecipientProfileImageUrl" class="rounded-circle mr-1" alt="@Model.First().RecipientName" width="40" height="40">
+                    }*@
+                   
                 </div>
                 <div class="flex-grow-1 pl-3">
                     Chatting with:
-                    @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    <strong>@Model.SentMessages.First().RecipientName</strong>
+                  @*  @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                     {
                         <strong>@Model.First().SenderName</strong>
                     }
                     else
                     {
                         <strong>@Model.First().RecipientName</strong>
-                    }
+                    }*@
                     
                 </div>
                
@@ -36,7 +41,7 @@
 
         <div class="position-relative">
             <div class="chat-messages p-4">
-                @foreach (var msg in Model)
+                @*@for(int i = 0;i>10;i++) 
                 {
                     if (msg.Content != null)
                     {
@@ -44,7 +49,7 @@
                         {
                             <div class="chat-message-right pb-4">
                                 <div>
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                    <img src="@msg.SenderProfileImageUrl" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
                                     <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToShortTimeString()</div>
                                 </div>
                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
@@ -57,7 +62,7 @@
                         {
                             <div class="chat-message-left pb-4">
                                 <div>
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                    <img src="@msg.SenderProfileImageUrl" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
                                     <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToShortTimeString()</div>
                                 </div>
                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
@@ -71,7 +76,7 @@
                     }
                     
 
-                }
+                }*@
 
 
 

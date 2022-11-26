@@ -40,15 +40,13 @@ namespace PetBook.Infrastructure.Data
                .WithMany(u => u.RecievedMessages)
                .OnDelete(DeleteBehavior.NoAction);
 
-            //builder.Entity<User>()
-            //    .HasMany(u => u.Chats)
-            //    .WithOne(c => c.Author)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Image>()
+                 .HasOne<User>()
+                 .WithOne(u => u.Image);
 
-            //builder.Entity<Chat>()
-            //    .HasOne(u => u.Recipient)
-            //    .WithMany(c => c.Chats)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Image>()
+                 .HasOne<Pet>()
+                 .WithMany(p => p.Images);
 
             builder.ApplyConfiguration(new BreedConfiguration());
 

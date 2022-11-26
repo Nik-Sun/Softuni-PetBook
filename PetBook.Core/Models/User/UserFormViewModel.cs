@@ -6,6 +6,9 @@ namespace PetBook.Core.Models.User
 {
     public class UserFormViewModel
     {
+        [Required]
+        public string Id { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "field is required.")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "must be between 2 and 50 symbols.")]
         public string FirstName { get; set; } = null!;
@@ -27,5 +30,6 @@ namespace PetBook.Core.Models.User
         public string Address { get; set; } = null!;
 
         public IFormFile? ProfilePicture { get; set; }
+        public string? ProfilePictureUrl { get; set; }
     }
 }

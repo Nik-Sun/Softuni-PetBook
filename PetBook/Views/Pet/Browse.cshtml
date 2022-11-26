@@ -10,10 +10,10 @@
             }
             @foreach (var pet in Model)
             {
-                <div class="col-md-4">
+                <div class="col-md-4 pb-4">
                     <div class="team-item">
                         <div class="position-relative overflow-hidden">
-                            <img class="img-fluid w-100" src="@pet.Images[0].Url" alt="pet-image">
+                            <img class="img-fluid w-100" style="height:30vh" src="@pet.Images[0].Url" alt="pet-image">
                             <div class="team-overlay">
                                 <div class="d-flex align-items-center justify-content-start">
                                     <a class="btn btn-light btn-square mx-1" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id"><i class="bi bi-twitter"></i></a>

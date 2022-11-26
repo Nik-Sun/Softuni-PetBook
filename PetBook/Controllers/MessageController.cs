@@ -35,6 +35,10 @@ namespace PetBook.Controllers
 
         public async Task<IActionResult> Chat(string recipientId)
         {
+            if (recipientId == null)
+            {
+                return BadRequest();
+            }
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var model = await messageService.GetMessagesForChat(currentUserId,recipientId);
             return View(model);

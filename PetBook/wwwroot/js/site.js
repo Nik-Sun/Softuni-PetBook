@@ -2,6 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+const uploadUrl = 'https://localhost:7156/User/UpdateProfilePicture'
 
 
 
@@ -21,17 +22,12 @@ function uploadImage() {
     let inputEl = document.getElementById('profile-pic-upload');
     inputEl.click();
     inputEl.onchange = (function (e) {
+
         let file = e.target.files[0];
-
-        reader = new FileReader()
-
         let fd = new FormData();
         fd.append('image', file);
 
-
-        
-        
-        fetch('https://localhost:7156/User/UpdateProfilePicture', {
+        fetch(uploadUrl, {
             method: 'POST', // or 'PUT'
             headers: {
                 
@@ -41,15 +37,11 @@ function uploadImage() {
             .then((response) => response.json())
             .then((data) => {
                 document.getElementById('profile-pic').src = data
+                console.log(document.querySelector('.text-danger').style.display = '');
+                console.log(inputEl.files[0]  );
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-
-
-
-
-
     })
 }
