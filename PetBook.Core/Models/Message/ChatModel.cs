@@ -10,13 +10,16 @@ namespace PetBook.Core.Models.Message
     {
         public ChatModel()
         {
-            SentMessages = new List<MessageModel>();
-            RecievedMessages = new List<MessageModel>();
+            Messages = new List<ChatMessageModel>();
+            
         }
-        public ICollection<MessageModel> SentMessages  { get; set; }
-        public ICollection<MessageModel> RecievedMessages { get; set; }
-
-        public string SenderId { get; set; }
+        public ICollection<ChatMessageModel> Messages  { get; set; }
+        
+        public string CurrentUserId { get; set; }
+        public string CurrentUserName { get; set; }
         public string RecipientId { get; set; }
+        public string RecipientName { get; set; }
+        public string CurrentUserProfileImageUrl { get; set; }
+        public string RecipientProfileImageUrl { get; set; }
     }
 }

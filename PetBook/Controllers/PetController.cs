@@ -31,17 +31,29 @@ namespace PetBook.Controllers
                 model.Breeds = petService.GetBreeds();
                 return View(model);
             }
-            
+
             await petService.AddPetAsync(model);
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> Browse()
+        public async Task<IActionResult> Browse([FromRoute]int id = 1)
         {
-            var pets = await petService.GetAll();
+            PetBrowseModel pets;
+            if (id == 1)
+            {
+                pets = await petService.GetAll();
+                return View(pets);
+            }
+            pets = await petService.GetAll(id);
             return View(pets);
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Browse(int page)
+        //{
+        //    var pets = await petService.GetAll(page);
+        //    return View(pets);
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)

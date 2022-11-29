@@ -19,40 +19,67 @@ namespace PetBook.Hubs
         }
 
 
-        public override async Task OnConnectedAsync()
+       
+        public async Task CreateGroup(string currentUserId, string recipientId)
         {
-            await repo.AddAsync<ActiveConnection>(new ActiveConnection
+            var group = await repo.All<SignalRGroup>(g => g.AuthorId == recipientId&&g.SecondMemberId == currentUserId)
+                .FirstOrDefaultAsync();
+
+            if (group == null)
             {
-                UserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier),
-                ConnectionId = Context.ConnectionId
+                group = new SignalRGroup()
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    AuthorId = currentUserId,
+                    SecondMemberId = recipientId
+                    
+                };
+                await repo.AddAsync(group);
+            }
+            else if(group.SecondMemberId != currentUserId)
+            {
+                group = new SignalRGroup()
+                {
+                    Name = Guid.NewGuid().ToString(),
+                    AuthorId = recipientId,
+                    SecondMemberId = currentUserId
+                };
+                await repo.AddAsync(group);
+            }
+            group.ConnectionIds.Add(new ConnectionId()
+            {
+                Value = Context.ConnectionId
             });
-            
+         
             await repo.SaveChangesAsync();
-            await Groups.AddToGroupAsync(Context.ConnectionId,Context.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            await base.OnConnectedAsync();
         }
 
         public async Task SendMessage(string recipientId, string messageText)
         {
             var currentUserId = Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             
+            var connectionIds = await repo.All<SignalRGroup>(g => g.AuthorId == recipientId && g.SecondMemberId == currentUserId
+            ||  g.AuthorId == currentUserId && g.SecondMemberId == recipientId)
+                .SelectMany(g => g.ConnectionIds.Select(id => id.Value))
+                .ToListAsync();
+              
+
+          
+
             var message = new Message()
             {
+                Id = Guid.NewGuid(),
                 SenderId = currentUserId,
                 RecieverId = recipientId,
                 Content = messageText,
                 CreatedOn = DateTime.UtcNow
             };
-            bool isUserOnline = repo.AllReadonly<ActiveConnection>(ac => ac.UserId == recipientId).Any();
-            if (isUserOnline)
-            {
-                message.IsRead = true;
-            }
+           
 
             string name = Context?.User?.Identity?.Name ?? "";
-            var recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
-                .Select(u => $"{u.FirstName} {u.LastName}")
-                .FirstAsync();
+            //var recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
+            //    .Select(u => $"{u.FirstName} {u.LastName}")
+            //    .FirstAsync();
 
             string? senderImageUrl = await repo.AllReadonly<User>(u => u.Id == currentUserId)
                 .Include(u => u.Image)
@@ -61,33 +88,54 @@ namespace PetBook.Hubs
 
             var model = new MessageModel()
             {
-                RecipientId = recipientId,
+                Id = message.Id.ToString(),
+               
                 SenderId = currentUserId,
                 SenderName = name,
-                RecipientName = recipientName,
+               CreatedOn = message.CreatedOn,
                 Content = messageText,
                 SenderProfileImageUrl = senderImageUrl
-
             };
-            if (Context.i)
-            {
-                Groups.AddToGroupAsync();
-            }
+
+            await SaveMessage(message);
+            await Clients.Clients(connectionIds).SendAsync("ReceiveMessage", model);
+
             
-            await Clients.Groups(recipientId,currentUserId).SendAsync("ReceiveMessage", model);
-            //await Clients.Users(recipientId, currentUserId).SendAsync("ReceiveMessage", model);
-            await repo.AddAsync(message);
-            await repo.SaveChangesAsync();
         }
 
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var connection = await repo.All<ActiveConnection>(c => c.ConnectionId == Context.ConnectionId)
-                .FirstOrDefaultAsync();
-            await repo.DeleteAsync<ActiveConnection>(connection.Id);
+            var currentUserId = Context.UserIdentifier;
+            var groups = await repo.All<SignalRGroup>(g => g.ConnectionIds.Any() == false)
+                .ToListAsync();
+            repo.DeleteRange(groups);
+            
+            string connectionId = Context.ConnectionId;
+            var connectionIds = await repo.All<ConnectionId>(id => id.Value == connectionId)
+                 .ToListAsync();
+            repo.DeleteRange<ConnectionId>(connectionIds);
             await repo.SaveChangesAsync();
+            
+
             await base.OnDisconnectedAsync(exception);
+        }
+
+
+        public async Task UpdateMessageStatus(string messageId, bool isRead)
+        {
+            if (isRead)
+            {
+                var message = await repo.GetByIdAsync<Message>(new Guid(messageId));
+                message.IsRead = isRead;
+                await repo.SaveChangesAsync();
+            }
+
+        }
+        private async Task SaveMessage(Message message)
+        {
+            await repo.AddAsync(message);
+            await repo.SaveChangesAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetBook.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using PetBook.Infrastructure.Data;
 namespace PetBook.Infrastructure.Migrations
 {
     [DbContext(typeof(PetBookDbContext))]
-    partial class PetBookDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221128155120_GroupsAdded")]
+    partial class GroupsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4897,28 +4899,6 @@ namespace PetBook.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.ConnectionId", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("SignalRGroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SignalRGroupId");
-
-                    b.ToTable("ConnectionId");
-                });
-
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -5204,13 +5184,6 @@ namespace PetBook.Infrastructure.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("PetBook.Infrastructure.Data.Models.ConnectionId", b =>
-                {
-                    b.HasOne("PetBook.Infrastructure.Data.Models.SignalRGroup", null)
-                        .WithMany("ConnectionIds")
-                        .HasForeignKey("SignalRGroupId");
-                });
-
             modelBuilder.Entity("PetBook.Infrastructure.Data.Models.Image", b =>
                 {
                     b.HasOne("PetBook.Infrastructure.Data.Models.Pet", null)
@@ -5296,8 +5269,6 @@ namespace PetBook.Infrastructure.Migrations
                 {
                     b.Navigation("Author")
                         .IsRequired();
-
-                    b.Navigation("ConnectionIds");
 
                     b.Navigation("SecondMember");
                 });

@@ -71,7 +71,8 @@ body {
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: 800px;
+    max-height: 700px;
+    min-height:300px;
     overflow-y: scroll;
     background: rgb(140,134,233);
     background: linear-gradient(180deg, rgba(140,134,233,1) 32%, rgba(24,238,30,1) 83%);
@@ -129,4 +130,17 @@ body {
 #profile-pic{
     height:300px;
     width:300px
+}
+.previous {
+    background-color: #f1f1f1;
+    color: black;
+}
+
+.next {
+    background-color: #04AA6D;
+    color: white;
+}
+
+.round {
+    border-radius: 50%;
 }

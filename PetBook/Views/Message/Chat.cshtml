@@ -3,57 +3,47 @@
 
 
 <div class="container p-0">
-    
-    <input id="senderId" type="hidden" value="@Model.SenderId" />
+
+    <input id="senderId" type="hidden" value="@Model.CurrentUserId" />
     <input id="recipient-id" type="hidden" value="@Model.RecipientId" />
-    
+
     <div class="col-12 col-lg-7 col-xl-9">
         <div class="py-2 px-4 border-bottom d-none d-lg-block">
             <div class="d-flex align-items-center py-1">
                 <div class="position-relative">
-                    <img src="@Model.RecievedMessages.First().RecipientProfileImageUrl" class="rounded-circle mr-1" alt="@Model.SentMessages.First().RecipientName" width="40" height="40">
-                  @*  @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    {
-                        <img src="@Model.First().SenderProfileImageUrl" class="rounded-circle mr-1" alt="@Model.First().SenderName" width="40" height="40">
-                    }
-                    else
-                    {
-                        <img src="@Model.First().RecipientProfileImageUrl" class="rounded-circle mr-1" alt="@Model.First().RecipientName" width="40" height="40">
-                    }*@
-                   
+                    <img src="@Model.RecipientProfileImageUrl" class="rounded-circle mr-1" alt="@Model.RecipientName" width="40" height="40">
                 </div>
                 <div class="flex-grow-1 pl-3">
                     Chatting with:
-                    <strong>@Model.SentMessages.First().RecipientName</strong>
-                  @*  @if (Model.First().RecipientId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                    {
-                        <strong>@Model.First().SenderName</strong>
-                    }
-                    else
-                    {
-                        <strong>@Model.First().RecipientName</strong>
-                    }*@
-                    
+                    <strong></strong>
+
+                    <strong>@Model.RecipientName</strong>
+
                 </div>
-               
+
             </div>
         </div>
 
         <div class="position-relative">
             <div class="chat-messages p-4">
-                @*@for(int i = 0;i>10;i++) 
+                @if (Model.Messages == null)
                 {
-                    if (msg.Content != null)
+
+                }
+                else
+                {
+                    @foreach (var msg in Model.Messages)
                     {
-                        if (msg.SenderId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+
+                        if (msg.AuthorId == User.FindFirstValue(ClaimTypes.NameIdentifier))
                         {
                             <div class="chat-message-right pb-4">
                                 <div>
-                                    <img src="@msg.SenderProfileImageUrl" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-                                    <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToShortTimeString()</div>
+                                    <img src="@Model.CurrentUserProfileImageUrl" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToLocalTime().ToShortTimeString()</div>
                                 </div>
                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                    <div class="font-weight-bold mb-1">@msg.SenderName</div>
+                                    <div class="font-weight-bold mb-1">@Model.CurrentUserName</div>
                                     @msg.Content
                                 </div>
                             </div>
@@ -62,21 +52,23 @@
                         {
                             <div class="chat-message-left pb-4">
                                 <div>
-                                    <img src="@msg.SenderProfileImageUrl" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                                    <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToShortTimeString()</div>
+                                    <img src="@Model.RecipientProfileImageUrl" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2">@msg.CreatedOn.ToLocalTime().ToShortTimeString()</div>
                                 </div>
                                 <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                                    
-                                    <div class="font-weight-bold mb-1">@msg.SenderName</div>
+
+                                    <div class="font-weight-bold mb-1">@Model.RecipientName</div>
                                     @msg.Content
                                 </div>
                             </div>
 
                         }
-                    }
-                    
 
-                }*@
+
+
+                    }
+                }
+
 
 
 

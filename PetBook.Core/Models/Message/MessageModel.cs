@@ -4,6 +4,7 @@ namespace PetBook.Core.Models.Message
 {
     public class MessageModel
     {
+        public string Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public string Content { get; set; }
         public string SenderName { get; set; }

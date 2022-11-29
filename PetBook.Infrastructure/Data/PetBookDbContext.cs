@@ -48,6 +48,15 @@ namespace PetBook.Infrastructure.Data
                  .HasOne<Pet>()
                  .WithMany(p => p.Images);
 
+            builder.Entity<User>()
+                .HasOne(u => u.MyGroup)
+                .WithOne(g => g.Author);
+
+            builder.Entity<User>()
+                .HasOne(u => u.MemberInGroup)
+                .WithOne(g => g.SecondMember)
+                .IsRequired(false);
+
             builder.ApplyConfiguration(new BreedConfiguration());
 
             builder.ApplyConfiguration(new CityConfiguration());

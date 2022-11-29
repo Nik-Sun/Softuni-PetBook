@@ -1,14 +1,14 @@
-﻿@model IEnumerable<PetViewModel>
+﻿@model PetBrowseModel
 
 <div class="py-5">
 
     <div class="container">
         <div class="row hidden-md-up">
-            @if (Model.Count() == 0)
+            @if (Model.Pets.Count() == 0)
             {
                 <h2 class="align-content-center">No Pets added yet!</h2>
             }
-            @foreach (var pet in Model)
+            @foreach (var pet in Model.Pets)
             {
                 <div class="col-md-4 pb-4">
                     <div class="team-item">
@@ -17,7 +17,7 @@
                             <div class="team-overlay">
                                 <div class="d-flex align-items-center justify-content-start">
                                     <a class="btn btn-light btn-square mx-1" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id"><i class="bi bi-twitter"></i></a>
-                                    <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-facebook"></i></a>
+                                    <a onclick="addLike(event)" class="btn btn-light btn-square mx-1" id="@pet.Id" ><i class="bi bi-facebook"></i></a>
                                     <a class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-linkedin"></i></a>
                                 </div>
                             </div>
@@ -32,8 +32,29 @@
             }
         </div><br>
     </div>
-
-
+    <div class="d-inline-flex" style="position:relative;left:45% ">
+        @if (Model.Pets.Count() < 6)
+        {
+            <button id="prev" onclick="changePage(event)" style="margin-inline:50px">&laquo;</button>
+            <div><h4 id="page-number">@Model.Page</h4></div>
+            <button id="next" disabled style="margin-inline:50px">&raquo;</button>
+        }
+        else if(Model.Page == 1)
+        {
+            <button id="prev" disabled style="margin-inline:50px">&laquo;</button>
+            <div><h4 id="page-number">@Model.Page</h4></div>
+            <button id="next" onclick="changePage(event)" style="margin-inline:50px">&raquo;</button>
+        }
+        else
+        { 
+            <button id="prev" onclick="changePage(event)" style="margin-inline:50px">&laquo;</button>
+            <div><h4 id="page-number">@Model.Page</h4></div>
+            <button id="next" onclick="changePage(event)" style="margin-inline:50px">&raquo;</button>
+        }
+       
+       
+    </div>
+    
 </div>
 
 

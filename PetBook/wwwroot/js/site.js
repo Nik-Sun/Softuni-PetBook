@@ -3,6 +3,7 @@
 
 // Write your JavaScript code.
 const uploadUrl = 'https://localhost:7156/User/UpdateProfilePicture'
+const likeUrl = 'https://localhost:7156/Api/Like'
 
 
 
@@ -30,18 +31,42 @@ function uploadImage() {
         fetch(uploadUrl, {
             method: 'POST', // or 'PUT'
             headers: {
-                
+
             },
-            body:fd
-            })
+            body: fd
+        })
             .then((response) => response.json())
             .then((data) => {
                 document.getElementById('profile-pic').src = data
                 console.log(document.querySelector('.text-danger').style.display = '');
-                console.log(inputEl.files[0]  );
+                console.log(inputEl.files[0]);
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     })
+}
+function changePage(event) {
+    let buttonClicked = event.currentTarget.id;
+    let currentPage = document.getElementById('page-number').textContent
+    if (buttonClicked == 'prev') {
+        currentPage--;
+    }
+    else {
+        currentPage++;
+    }
+    console.log(buttonClicked);
+    console.log(currentPage);
+    location.href = `https://localhost:7156/Pet/Browse/${currentPage}`;
+}
+
+function addLike(e) {
+    e.preventDefault();
+    let petId = e.currentTarget.id;
+    console.log(e,petId);
+    fetch(`${likeUrl}/${petId}`, {
+        method: 'get',
+    }).then(e => e.json())
+        .then(res => console.log(res))
+        .catch(e => console.log(e))
 }

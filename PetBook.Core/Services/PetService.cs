@@ -50,12 +50,17 @@ namespace PetBook.Core.Services
             await repo.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<PetViewModel>> GetAll(int pageNumber = 1)
+        public async Task<PetBrowseModel> GetAll(int pageNumber = 1)
         {
+            double maxPageNumber = Math.Ceiling(repo.AllReadonly<Pet>().Count() / 6.0);
+            if (pageNumber > maxPageNumber)
+            {
+                pageNumber = (int)maxPageNumber;
+            }
             int take = 6;
             int skip = (take * pageNumber) - take;
 
-            var pets = repo.AllReadonly<Pet>()
+            var pets = await repo.AllReadonly<Pet>()
                   .Include(p => p.Owner)
                   .Skip(skip)
                   .Take(take)
@@ -70,8 +75,13 @@ namespace PetBook.Core.Services
                           Id = i.Id.ToString(),
                           Url = i.Url
                       }).ToList(),
-                  });
-            return await pets.ToListAsync();
+                  }).ToListAsync();
+
+            return new PetBrowseModel()
+            {
+                Pets = pets,
+                Page = pageNumber
+            };
         }
 
         public IEnumerable<BreedDto> GetBreeds()

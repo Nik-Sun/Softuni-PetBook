@@ -18,10 +18,10 @@ namespace PetBook.Core.Services
         {
             var recievedMessages = await repo.AllReadonly<Message>(m => (m.RecieverId == currentUserId))
                 .Include(m => m.Sender)
-                .ThenInclude(u=> u.Image)
+                .ThenInclude(u => u.Image)
                 .ToListAsync();
 
-            
+
 
             var sentMessages = await repo.AllReadonly<Message>(m => (m.SenderId == currentUserId))
                 .Include(m => m.Reciever)
@@ -45,7 +45,7 @@ namespace PetBook.Core.Services
                     UserProfilePictureUrl = message.Sender.Image.Url
                 });
 
-           
+
             }
             foreach (var message in sentMessages.DistinctBy(m => m.RecieverId))
             {
@@ -58,103 +58,56 @@ namespace PetBook.Core.Services
             }
 
             model.Users = model.Users.DistinctBy(u => u.UserId).ToList();
-            
+
 
             return model;
 
 
         }
 
-        public async Task<ChatModel> GetMessagesForChat(string currentUserId, string otherUserId)
+        public async Task<ChatModel> GetMessagesForChat(string currentUserId, string recipientId)
         {
             var messages = await repo.AllReadonly<Message>(m =>
-            (m.RecieverId == currentUserId && m.SenderId == otherUserId)
-            || (m.SenderId == currentUserId && m.RecieverId == otherUserId))
-                 .Include(m => m.Sender)
-                 .ThenInclude(s => s.Image)
-                 .Include(m => m.Reciever)
-                 .ThenInclude(r => r.Image)
+            (m.RecieverId == currentUserId && m.SenderId == recipientId)
+            || (m.SenderId == currentUserId && m.RecieverId == recipientId))
+                 .OrderBy(m => m.CreatedOn)
+                 .Select(m => new ChatMessageModel()
+                 {
+                     Content = m.Content,
+                     CreatedOn = m.CreatedOn,
+                     AuthorId = m.SenderId
+                 })
                  .ToListAsync();
+
+            var currentUser = await repo.AllReadonly<User>(u => u.Id == currentUserId)
+                .Include(u => u.Image)
+                .FirstAsync();
+            var recipient = await repo.AllReadonly<User>(u => u.Id == recipientId)
+                .Include(u => u.Image)
+               .FirstAsync();
             var model = new ChatModel()
             {
-                SenderId = currentUserId,
-                RecipientId = otherUserId
+                CurrentUserId = currentUserId,
+                RecipientId = recipientId,
+                CurrentUserProfileImageUrl = currentUser.Image.Url,
+                RecipientProfileImageUrl = recipient.Image.Url,
+                CurrentUserName = currentUser.UserName,
+                RecipientName = recipient.UserName,
+                Messages = messages,
+
             };
-           
 
-            foreach (var msg in messages)
-            {
-                if (msg.SenderId == currentUserId)
-                {
-                    model.SentMessages.Add(new MessageModel()
-                    {
-                        SenderId = msg.SenderId,
-                        RecipientId = msg.RecieverId,
-                        SenderName = msg.Sender.FirstName,
-                        RecipientName = msg.Reciever.FirstName,
-                        Content = msg.Content,
-                        CreatedOn = msg.CreatedOn,
-                        SenderProfileImageUrl = msg.Sender.Image.Url,
-                        RecipientProfileImageUrl = msg.Reciever.Image.Url
-                    });
-                }
-                else
-                {
-                    model.RecievedMessages.Add(new MessageModel()
-                    {
-                        SenderId = msg.SenderId,
-                        RecipientId = msg.RecieverId,
-                        SenderName = msg.Sender.FirstName,
-                        RecipientName = msg.Reciever.FirstName,
-                        Content = msg.Content,
-                        CreatedOn = msg.CreatedOn,
-                        SenderProfileImageUrl = msg.Sender.Image.Url,
-                        RecipientProfileImageUrl = msg.Reciever.Image.Url
-                    });
-                }
-            }
-            //{
-            //    CreatedOn = m.CreatedOn,
-            //    Content = m.Content,
-            //    SenderName = m.Sender.FirstName,
-            //    RecipientName = m.Reciever.FirstName,
-            //    SenderId = m.SenderId,
-            //    RecipientId = m.RecieverId,
-            //    SenderProfileImageUrl = m.Sender.Image.Url,
-            //    RecipientProfileImageUrl = m.Reciever.Image.Url
 
-            //});
 
-            //if (model.SentMessages.Any() || model.RecievedMessages.Any())
-            //{
-            //    await MarkMessagesAsRead(currentUserId);
-            //    return model;
-            //}
-
-            //var senderName = await repo.AllReadonly<User>(u => u.Id == currentUserId)
-            //    .Select(u => u.FirstName + " " + u.LastName)
-            //    .FirstOrDefaultAsync();
-            //var recipientName = await repo.AllReadonly<User>(u => u.Id == otherUserId)
-            //   .Select(u => u.FirstName + " " + u.LastName)
-            //   .FirstOrDefaultAsync();
-
-            //var otherModel = model.ToList();
-            //otherModel.Add(new MessageModel()
-            //{
-            //    CreatedOn = DateTime.UtcNow,
-            //    SenderName = senderName,
-            //    RecipientName = recipientName,
-            //    SenderId = currentUserId,
-            //    RecipientId = otherUserId
-            //});
+            await MarkMessagesAsRead(currentUserId,recipientId);
             return model;
         }
 
 
-        
-        private async Task MarkMessagesAsRead(string currentUserId)
+
+        private async Task MarkMessagesAsRead(string currentUserId,string recipientId)
         {
-            var messages = await repo.All<Message>(m => m.RecieverId == currentUserId)
+            var messages = await repo.All<Message>(m => m.RecieverId == currentUserId && m.SenderId == recipientId)
                 .ToListAsync();
             foreach (var msg in messages)
             {

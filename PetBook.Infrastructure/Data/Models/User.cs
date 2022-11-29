@@ -35,6 +35,12 @@ namespace PetBook.Infrastructure.Data.Models
 
         public Image Image { get; set; }
 
-        public ICollection<ActiveConnection>? ActiveConnections { get; set; }
+        [ForeignKey(nameof(MyGroup))]
+        public int? AuthorOfGroupId { get; set; }
+        public SignalRGroup? MyGroup { get; set; }
+
+        [ForeignKey(nameof(MemberInGroup))]
+        public int? MemberInGroupId { get; set; }
+        public SignalRGroup? MemberInGroup { get; set; }
     }
 }
