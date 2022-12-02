@@ -57,6 +57,21 @@ namespace PetBook.Infrastructure.Data
                 .WithOne(g => g.SecondMember)
                 .IsRequired(false);
 
+            builder.Entity<User>()
+                .HasMany(u => u.LikedPets)
+                .WithOne(l => l.User)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Pet>()
+                .HasMany(p => p.LikedBy)
+                .WithOne(l => l.Pet)
+                .HasForeignKey(p => p.PetId)
+                .OnDelete(DeleteBehavior.NoAction); 
+
+            builder.Entity<Like>()
+                .HasKey(l => l.Id);
+
             builder.ApplyConfiguration(new BreedConfiguration());
 
             builder.ApplyConfiguration(new CityConfiguration());

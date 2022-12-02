@@ -12,7 +12,7 @@ namespace PetBook.Core.Services
         private readonly IRepository repo;
         private readonly IImageService imageService;
         public PetService(IRepository _repo
-            ,IImageService _imageService)
+            , IImageService _imageService)
         {
             repo = _repo;
             imageService = _imageService;
@@ -35,15 +35,18 @@ namespace PetBook.Core.Services
 
             foreach (var img in model.Images)
             {
-                using (var stream =img.OpenReadStream())
+                //using (var stream =img.OpenReadStream())
+                //{
+                //    var path = await imageService.Upload("pet-images",stream);
+                //    pet.Images.Add(new Image()
+                //    {
+                //        Url = path
+                //    });
+                //}
+                pet.Images.Add(new Image()
                 {
-                    var path = await imageService.Upload("pet-images",stream);
-                    pet.Images.Add(new Image()
-                    {
-                        Url = path
-                    });
-                }
-               
+                    Url = "1"
+                });
             }
 
             await repo.AddAsync(pet);
@@ -69,7 +72,7 @@ namespace PetBook.Core.Services
                       Id = p.Id,
                       Owner = $"{p.Owner.FirstName} {p.Owner.LastName}",
                       Name = p.Name,
-                      IsMale=p.IsMale,
+                      IsMale = p.IsMale,
                       Images = p.Images.Select(i => new ImageViewModel()
                       {
                           Id = i.Id.ToString(),
@@ -129,19 +132,19 @@ namespace PetBook.Core.Services
 
         private string GetSize(double w)
         {
-            if (w<5.5)
+            if (w < 5.5)
             {
                 return "Toy";
             }
-            else if (w>= 5.5 && w< 10)
+            else if (w >= 5.5 && w < 10)
             {
                 return "Small";
             }
-            else if (w>=10 && w < 26)
+            else if (w >= 10 && w < 26)
             {
                 return "Medium";
             }
-            else if (w>=26 && w<45)
+            else if (w >= 26 && w < 45)
             {
                 return "Large";
             }

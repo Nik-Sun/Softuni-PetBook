@@ -42,5 +42,7 @@ namespace PetBook.Infrastructure.Data.Models
         [ForeignKey(nameof(MemberInGroup))]
         public int? MemberInGroupId { get; set; }
         public SignalRGroup? MemberInGroup { get; set; }
+
+        public ICollection<Like> LikedPets { get; set; }
     }
 }

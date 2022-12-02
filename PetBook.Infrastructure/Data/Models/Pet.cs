@@ -45,5 +45,7 @@ namespace PetBook.Infrastructure.Data.Models
         public bool IsMale { get; set; }
 
         public ICollection<Image> Images { get; set; }
+
+        public ICollection<Like> LikedBy { get; set; }
     }
 }

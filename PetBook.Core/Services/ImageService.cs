@@ -12,11 +12,11 @@ namespace PetBook.Core.Services
         public ImageService(IConfiguration _configuration)
         {
             configuration = _configuration;
-            client = new MinioClient()
-              .WithEndpoint(configuration.GetSection("MinioCreds:Endpoint").Value)
-              .WithCredentials(configuration.GetSection("MinioCreds:AccessKey").Value
-              , configuration.GetSection("MinioCreds:SecretKey").Value)
-              .Build();
+            client = new MinioClient();
+              //.WithEndpoint(configuration.GetSection("MinioCreds:Endpoint").Value)
+              //.WithCredentials(configuration.GetSection("MinioCreds:AccessKey").Value
+              //, configuration.GetSection("MinioCreds:SecretKey").Value)
+              //.Build();
         }
 
         public async Task<string> Upload(string bucketName,Stream data)

@@ -65,7 +65,8 @@ function addLike(e) {
     let petId = e.currentTarget.id;
     console.log(e,petId);
     fetch(`${likeUrl}/${petId}`, {
-        method: 'get',
+        method: 'post'
+        
     }).then(e => e.json())
         .then(res => console.log(res))
         .catch(e => console.log(e))

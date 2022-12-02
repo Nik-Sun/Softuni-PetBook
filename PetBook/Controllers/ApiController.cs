@@ -1,20 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PetBook.Core.Services;
 using System.Security.Claims;
 
 namespace PetBook.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/like")]
-  
+    [Route("Api/Like")]
+
     public class ApiController : Controller
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Like([FromRoute]string id)
+        private readonly ILikeService likeService;
+
+        public ApiController(ILikeService _likeService)
+        {
+            likeService= _likeService;
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Like(string id)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(new { id, currentUserId });
+            var totalLikes = await likeService.AddLike(currentUserId,id);
+            return Ok(totalLikes);
         }
     }
 }
