@@ -11,5 +11,7 @@ namespace PetBook.Infrastructure.Data.Models
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; } = null!;
+        public double Lattitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

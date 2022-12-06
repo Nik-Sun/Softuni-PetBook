@@ -31,5 +31,7 @@ namespace PetBook.Core.Models.User
 
         [MaxLength(100)]
         public string Address { get; set; } = null!;
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

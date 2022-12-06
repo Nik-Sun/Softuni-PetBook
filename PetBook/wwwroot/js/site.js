@@ -62,12 +62,58 @@ function changePage(event) {
 
 function addLike(e) {
     e.preventDefault();
-    let petId = e.currentTarget.id;
-    console.log(e,petId);
+    let target = e.currentTarget;
+    let petId = target.id;
+    console.log(e, petId);
     fetch(`${likeUrl}/${petId}`, {
         method: 'post'
-        
     }).then(e => e.json())
-        .then(res => console.log(res))
+        .then(res => {
+            let likesElement = target.querySelector('.badge');
+            likesElement.textContent = res
+            likesElement.parentElement.classList.add('bi-heart-fill');
+            likesElement.parentElement.classList.remove('bi-heart');
+            document.getElementById(petId).setAttribute('disabled', 'true');
+        })
         .catch(e => console.log(e))
+}
+
+function registerFirstStage(e) {
+    e.preventDefault();
+    let cityId = document.getElementById('CityId').value;
+    initMap(cityId)
+    document.getElementById('reg-f').style.display = 'none';
+    document.getElementById('reg-s').style.display = 'flex';
+    document.getElementById('reg-btn').style.display = 'flex';
+
+}
+
+function GetNearbyUsers() {
+    fetch(`https://localhost:7156/NearbyUsers/NearbyUsers`, {
+        method: 'get'
+    })
+        .then(res => res.json())
+        .then(data => initMap(data))
+        .catch(err => console.log(err))
+}
+function populateSearchField(event) {
+
+    let searchBox = document.getElementById('search-box')
+    let altSearch = document.getElementById('alt-search');
+    if (event.currentTarget.value == 'size') {
+       
+        searchBox.setAttribute('hidden', "")
+        
+        altSearch.addEventListener('change', (e) => {
+            searchBox.value = e.currentTarget.value;
+
+        })
+        altSearch.removeAttribute('hidden');
+    } else {
+        altSearch.setAttribute('hidden', '')
+        searchBox.removeAttribute('hidden')
+    }
+  
+    
+   
 }

@@ -63,10 +63,12 @@ namespace PetBook.Controllers
             model.Cities = await userService.GetCitiesAsync();
             return View(model);
         }
+      
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+           
             
             if (ModelState.IsValid == false)
             {
@@ -82,7 +84,9 @@ namespace PetBook.Controllers
                 Address = new Address()
                 {
                     CityId = model.CityId,
-                    AddressText = model.Address
+                    AddressText = model.Address,
+                    Lattitude = model.Latitude,
+                    Longitude = model.Longitude
                 },
                 UserName = model.FirstName,
                 Image =new Infrastructure.Data.Models.Image()
@@ -157,5 +161,6 @@ namespace PetBook.Controllers
             }
 
         }
+      
     }
 }

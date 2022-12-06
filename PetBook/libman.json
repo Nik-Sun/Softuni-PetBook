@@ -10,6 +10,11 @@
       "provider": "unpkg",
       "library": "lit-html@2.4.0",
       "destination": "wwwroot/lib/lit-html/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@googlemaps/js-api-loader@1.15.1",
+      "destination": "wwwroot/lib/googlemaps/js-api-loader/"
     }
   ]
 }

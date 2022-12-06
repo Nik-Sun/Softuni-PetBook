@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using PetBook.Core.Models.Pets;
 using PetBook.Core.Services;
 using System.Security.Claims;
@@ -37,15 +38,18 @@ namespace PetBook.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         public async Task<IActionResult> Browse([FromRoute]int id = 1)
         {
+            ViewBag.SearchModel = new SearchModel(); 
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             PetBrowseModel pets;
-            if (id == 1)
+            if (id <= 1)
             {
-                pets = await petService.GetAll();
+                pets = await petService.GetAll(currentUserId);
                 return View(pets);
             }
-            pets = await petService.GetAll(id);
+            pets = await petService.GetAll(currentUserId, id);
             return View(pets);
         }
         //[HttpPost]
@@ -60,6 +64,21 @@ namespace PetBook.Controllers
         {
             var model = await petService.GetPetById(id);
             return View(model);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Search(PetBrowseModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Browse));
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await petService.SearchPets(model.Criteria, model.Search, userId);
+            result.IsSearch = true;
+            return View("Browse",result);
         }
     }
 }

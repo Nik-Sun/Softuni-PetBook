@@ -8,6 +8,7 @@ namespace PetBook.Core.Services
         public Task<ICollection<CityDTO>> GetCitiesAsync();
         public Task<UserFormViewModel> FindUserByIdAsync(string id);
         public Task UpdateUser(UserFormViewModel model);
+        public Task<IEnumerable<UserNearbyModel>> GetUsersNearby(string userId);
 
 
     }

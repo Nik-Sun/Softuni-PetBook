@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PetBook.Core.Models.Message;
-using PetBook.Core.Models.Pets;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
 using System.Security.Claims;

@@ -56,6 +56,24 @@ namespace PetBook.Core.Services
             return cities;
         }
 
+        public async Task<IEnumerable<UserNearbyModel>> GetUsersNearby(string userId)
+        {
+           var cityId = await repo.AllReadonly<User>(u => u.Id == userId)
+                .Include(u => u.Address)
+                .Select(u => u.Address.CityId)
+                .FirstAsync();
+
+           var nearbyUsers = await  repo.AllReadonly<User>(u => u.Address.CityId == cityId)
+                .Select(u => new UserNearbyModel()
+                {
+                    
+                    Lat = double.Parse(u.Address.Lattitude),
+                    Lng = double.Parse(u.Address.Longitude)
+                }).ToArrayAsync();
+
+            return nearbyUsers;
+        }
+
         public async Task UpdateUser(UserFormViewModel model)
         {
             var user = await repo.All<User>(u => u.Id == model.Id)

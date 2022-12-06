@@ -13,5 +13,10 @@ namespace PetBook.Core.Data.Models.DTOs
         public int Id { get; set; }
         [JsonProperty("city")]
         public string Name  { get; set; }
+
+        [JsonProperty("lat")]
+        public double Lattitude { get; set; }
+        [JsonProperty("lng")]
+        public double  Longitude { get; set; }
     }
 }

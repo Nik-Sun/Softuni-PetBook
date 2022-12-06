@@ -11,6 +11,10 @@ namespace PetBook.Infrastructure.Data.Models
         [Required]
         [MaxLength(AddressTextMaxLength)]
         public string AddressText { get; set; } = null!;
+        [Required]
+        public string Lattitude { get; set; }
+        [Required]
+        public string Longitude { get; set; }
 
         [ForeignKey(nameof(City))]
         public int CityId { get; set; }

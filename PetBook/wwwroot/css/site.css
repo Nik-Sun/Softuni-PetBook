@@ -45,6 +45,11 @@ body {
  .my-class:hover{
      transform: scale(1.2);
  }
+ #main{
+     min-height:700px;
+     min-width:550px;
+     object-fit:cover
+ }
 
 input:focus::placeholder {
     color: transparent;
@@ -143,4 +148,76 @@ body {
 
 .round {
     border-radius: 50%;
+}
+/****************************************************************/
+body {
+    margin: 0;
+}
+
+.sb-title {
+    position: relative;
+    top: -12px;
+    font-family: Roboto, sans-serif;
+    font-weight: 500;
+}
+
+.sb-title-icon {
+    position: relative;
+    top: -5px;
+}
+
+.card-container {
+    display: flex;
+    height: 500px;
+    width: 600px;
+}
+
+.panel {
+    background: white;
+    width: 300px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.half-input-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.half-input {
+    max-width: 120px;
+}
+
+.map {
+    width: 300px;
+}
+
+h2 {
+    margin: 0;
+    font-family: Roboto, sans-serif;
+}
+
+input {
+    height: 30px;
+}
+
+input {
+    border: 0;
+    border-bottom: 1px solid black;
+    font-size: 14px;
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
+
+    input:focus::placeholder {
+        color: white;
+    }
+#map {
+    height: 400px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
 }

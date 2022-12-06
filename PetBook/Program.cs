@@ -32,6 +32,7 @@ builder.Services.AddScoped<IRepository, PetBookRepository>();
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ILikeService, LikeService>();
+builder.Services.AddScoped<ICityService, CityService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

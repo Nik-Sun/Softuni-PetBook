@@ -30,6 +30,9 @@ namespace PetBook.Infrastructure.Data.Configuration
                 {
                     Id = i,
                     Name = citiesDto[i - 1].Name,
+                    Lattitude = citiesDto[i - 1].Lattitude,
+                    Longitude = citiesDto[i - 1].Longitude
+
                 });
             }
             return cities.ToArray();
