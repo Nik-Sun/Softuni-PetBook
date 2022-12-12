@@ -28,9 +28,5 @@ namespace PetBook.Controllers
             }
             return Ok(users);
         }
-        public IActionResult Map()
-        {
-            return View();
-        }
     }
 }

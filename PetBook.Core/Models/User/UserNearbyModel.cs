@@ -10,7 +10,6 @@ namespace PetBook.Core.Models.User
     {
         public double Lat { get; set; }
         public double Lng { get; set; }
-        public string PetName { get; set; }
-        public string PetId { get; set; }
+        public string Username { get; set; }
     }
 }

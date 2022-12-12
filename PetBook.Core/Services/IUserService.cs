@@ -9,6 +9,7 @@ namespace PetBook.Core.Services
         public Task<UserFormViewModel> FindUserByIdAsync(string id);
         public Task UpdateUser(UserFormViewModel model);
         public Task<IEnumerable<UserNearbyModel>> GetUsersNearby(string userId);
+        public Task<bool> CheckUsernameAvailability(string username);
 
 
     }

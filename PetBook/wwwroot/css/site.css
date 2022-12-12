@@ -45,11 +45,27 @@ body {
  .my-class:hover{
      transform: scale(1.2);
  }
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
  #main{
      min-height:700px;
      min-width:550px;
      object-fit:cover
  }
+.modal-open {
+    content: "";
+    background: rgba(0,0,0,.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+}
 
 input:focus::placeholder {
     color: transparent;

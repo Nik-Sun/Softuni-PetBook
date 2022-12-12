@@ -77,9 +77,6 @@ namespace PetBook.Hubs
            
 
             string name = Context?.User?.Identity?.Name ?? "";
-            //var recipientName = await repo.AllReadonly<User>(u => u.Id == recipientId)
-            //    .Select(u => $"{u.FirstName} {u.LastName}")
-            //    .FirstAsync();
 
             string? senderImageUrl = await repo.AllReadonly<User>(u => u.Id == currentUserId)
                 .Include(u => u.Image)

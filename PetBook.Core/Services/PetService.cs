@@ -4,8 +4,8 @@ using PetBook.Core.Models.Common;
 using PetBook.Core.Models.Pets;
 using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
-using System.Linq.Expressions;
 
+using static PetBook.Infrastructure.Data.DataConstants.MinioBuckets;
 namespace PetBook.Core.Services
 {
     public class PetService : IPetService
@@ -36,17 +36,10 @@ namespace PetBook.Core.Services
 
             foreach (var img in model.Images)
             {
-                //using (var stream =img.OpenReadStream())
-                //{
-                //    var path = await imageService.Upload("pet-images",stream);
-                //    pet.Images.Add(new Image()
-                //    {
-                //        Url = path
-                //    });
-                //}
+                
                 pet.Images.Add(new Image()
                 {
-                    Url = "1"
+                    Url = await imageService.Upload(PetBucket,img.OpenReadStream())
                 });
             }
 
@@ -56,35 +49,7 @@ namespace PetBook.Core.Services
 
         public async Task<PetBrowseModel> GetAll(string userId, int pageNumber = 1)
         {
-
-            //double maxPageNumber = Math.Ceiling(repo.AllReadonly<Pet>().Count() / 6.0);
-            //if (pageNumber > maxPageNumber)
-            //{
-            //    pageNumber = (int)maxPageNumber;
-            //}
-            //int take = 6;
-            //int skip = (take * pageNumber) - take;
             var pets = repo.AllReadonly<Pet>();
-            //var pets = await repo.AllReadonly<Pet>()
-            //      .Include(p => p.Owner)
-            //      .Include(p => p.LikedBy)
-            //      .Skip(skip)
-            //      .Take(take)
-            //      .Select(p => new PetViewModel()
-            //      {
-            //          Id = p.Id,
-            //          Owner = $"{p.Owner.FirstName} {p.Owner.LastName}",
-            //          Name = p.Name,
-            //          IsMale = p.IsMale,
-            //          Likes = p.LikedBy.Count(),
-            //          CanLike = p.LikedBy.Any(l=> (l.UserId == userId) ) == false &&
-            //          p.OwnerId != userId,
-            //          Images = p.Images.Select(i => new ImageViewModel()
-            //          {
-            //              Id = i.Id.ToString(),
-            //              Url = i.Url
-            //          }).ToList(),
-            //      }).ToListAsync();
 
             return await GetBrowseModelAsync(pets, userId, pageNumber);
         }
@@ -128,6 +93,8 @@ namespace PetBook.Core.Services
                 OwnerId = pet.OwnerId,
                 Size = GetSize(pet.Weight),
                 Id = pet.Id,
+                Height = pet.Height,
+                Weight = pet.Weight
             };
         }
 
@@ -163,13 +130,19 @@ namespace PetBook.Core.Services
                     {
                         pets = repo.AllReadonly<Pet>(p => p.Weight >= 45);
                     }
-
-                    return result;
+                    else
+                    {
+                        return result;
+                    }
+                    break;
 
                 case "ownerName":
                     pets = repo.AllReadonly<Pet>(p => p.Owner.FirstName.Contains(search) || p.Owner.LastName.Contains(search));
                     break;
 
+                case "petName":
+                    pets = repo.AllReadonly<Pet>(p => p.Name.Contains(search));
+                    break;
                 default:
                     return result;
 
@@ -221,6 +194,7 @@ namespace PetBook.Core.Services
                   {
                       Id = p.Id,
                       Owner = $"{p.Owner.FirstName} {p.Owner.LastName}",
+                      OwnerId = p.OwnerId,
                       Name = p.Name,
                       IsMale = p.IsMale,
                       Likes = p.LikedBy.Count(),
@@ -240,7 +214,12 @@ namespace PetBook.Core.Services
             };
         }
 
+        public async Task<PetBrowseModel> GetPetsOwnedByUser(string userId)
+        {
+            var pets = repo.AllReadonly<Pet>(p => p.OwnerId == userId);
+            var model = await GetBrowseModelAsync(pets, userId);
 
-
+            return model;
+        }
     }
 }

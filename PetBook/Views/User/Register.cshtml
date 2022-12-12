@@ -1,6 +1,6 @@
 ﻿@model RegisterViewModel
 
-<form method="post" asp-controller="User" asp-action="Register">
+<form id="reg-form" method="post" asp-controller="User" asp-action="Register">
     <div id="reg-f" class="row">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -25,6 +25,11 @@
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                             <div class="form-outline mb-4">
+                                <input type="text" class="form-control" asp-for="Username" />
+                                <label class="form-label" asp-for="Username">Username</label>
+                                <span asp-validation-for="Username"  class="text-danger"></span>
+                            </div>
+                            <div class="form-outline mb-4">
                                 <input type="email" class="form-control" asp-for="Email" />
                                 <label class="form-label" asp-for="Email">Your Email Address</label>
                                 <span asp-validation-for="Email" class="text-danger"></span>
@@ -46,12 +51,12 @@
 
 
                             <div class="form-outline mb-4">
-                                <input type="password" asp-for="Password" class="form-control" />
+                                <input type="" asp-for="Password" class="form-control" />
                                 <label class="form-label" for="form3Example1w">Password</label>
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                             <div class="form-outline mb-4">
-                                <input type="password" asp-for="ConfirmPassword" class="form-control" />
+                                <input type="" asp-for="ConfirmPassword" class="form-control" />
                                 <label class="form-label" for="form3Example1w">Confirm Password</label>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>
@@ -59,9 +64,11 @@
 
 
 
-                            <button type="button" onclick="registerFirstStage(event)" class="btn btn-success btn-lg mb-1">Proceed</button>
+                            <button id="reg-proceed" type="button" class="btn btn-success btn-lg mb-1">Proceed</button>
 
-
+                            <input asp-for="Address" type="text" hidden />
+                            <input asp-for="Latitude" type="hidden" />
+                            <input asp-for="Longitude" type="hidden" />
 
                         </div>
                     </div>
@@ -69,29 +76,31 @@
             </div>
         </div>
     </div>
-    <div id="reg-s" class="container bg-white" style="display:none;height:300px;">
-
-        <div class="col-6 align-self-center">
-            <div>
-                <img class="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="">
-                <span class="sb-title">Address Selection</span>
-            </div>
-            <input asp-for="Address" type="text" placeholder="Address" id="location-input" />
-            <input id="lat" type="hidden" asp-for="Latitude" />
-            <input id="lng" type="hidden" asp-for="Longitude" />
-            <button class="btn btn-success btn-lg mb-1" type="submit">Register</button>
-        </div>
-        <div class="map col-6" id="gmp-map"></div>
-       
-    </div>
-    <div id="reg-btn" style="display:none">
-       
-    </div>
+    
+   
 </form>
+<div id="reg-s" class="container bg-white" style="display:none;height:300px;">
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZa7jwNGAWgJZ-BbsAId3LPB4Id90WJSE&libraries=marker,places&v=beta"
-        defer></script>
-<script src="~/js/google-maps.js"></script>
+    <div class="col-6 align-self-center">
+        <div>
+            <img class="sb-title-icon" src="https://fonts.gstatic.com/s/i/googlematerialicons/location_pin/v5/24px.svg" alt="">
+            <span class="sb-title">Address Selection</span>
+        </div>
+        <form id="autocomp-support-form">
+            <input type="text" id="location-input" />
+            <input id="location-input" type="text" hidden />
+            <input id="lat" type="hidden" />
+            <input id="lng" type="hidden" />
+            <button id="map-form-btn" class="btn btn-success btn-lg mb-1" type="submit">Register</button>
+        </form>
+        
+        <p id="marker-info" style="display:none">Drag the marker to a place you most often use to walk your pet.</p>
+    </div>
+    <div class="map col-6" id="gmp-map"></div>
+
+</div>
+
+<script type="module" src="~/js/register.js"></script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

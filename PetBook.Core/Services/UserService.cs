@@ -19,6 +19,12 @@ namespace PetBook.Core.Services
             imageService = _imageService;
         }
 
+        public async Task<bool> CheckUsernameAvailability(string username)
+        {
+            bool isAvaliable = await repo.AllReadonly<User>(u => u.NormalizedUserName == username.ToUpper()).AnyAsync() == false;
+            return isAvaliable;
+        }
+
         public async Task<UserFormViewModel> FindUserByIdAsync(string id)
         {
             var user = await repo.AllReadonly<User>(u => u.Id == id)
@@ -66,7 +72,7 @@ namespace PetBook.Core.Services
            var nearbyUsers = await  repo.AllReadonly<User>(u => u.Address.CityId == cityId)
                 .Select(u => new UserNearbyModel()
                 {
-                    
+                    Username = u.UserName,
                     Lat = double.Parse(u.Address.Lattitude),
                     Lng = double.Parse(u.Address.Longitude)
                 }).ToArrayAsync();
@@ -86,7 +92,9 @@ namespace PetBook.Core.Services
                 user.LastName = model.LastName;
                 user.Email = model.Email;
                 user.Address.AddressText = model.Address;
-                
+                user.Address.Longitude = model.Longitude;
+                user.Address.Lattitude = model.Latitude;
+
                 if (model.ProfilePicture != null)
                 {
                     var oldImageUrl = user.Image.Url;

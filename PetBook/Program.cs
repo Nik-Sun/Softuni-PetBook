@@ -7,9 +7,7 @@ using PetBook.Infrastructure.Data;
 using PetBook.Infrastructure.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-var accsessKey = builder.Configuration["MinioCreds:AccessKey"];
-var secretKey = builder.Configuration["MinioCreds:SecretKey"];
-var endpoint = builder.Configuration["MinioCreds:Endpoint"];
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

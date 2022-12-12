@@ -1,0 +1,60 @@
+﻿@model PetDetailViewModel
+
+<div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="row-cols-2">
+                @foreach (var img in Model.Images)
+                {
+                    <div class="team-item col-5">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid w-100" src="@img.Url" alt="pet-image">
+                            <div class="team-overlay">
+                                <div class="d-flex align-items-center justify-content-start">
+                                    <a class="btn btn-light btn-square mx-1" href="/Pet/Details/74a48451-0885-4fe2-7e12-08dacf375e3b"><div class="bi bi-search"></div></a>
+                                    <a id="like-btn" class="btn btn-light btn-square mx-1" disabled=""><div class="bi bi-heart-fill"><div class="badge bg-success float-right">3</div></div></a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="@Model.Name"></div>
+                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="" placeholder="@Model."></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="number" class="form-control" placeholder="@Model.Weight" value=""></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="@Model.Height" value=""></div>
+                    @*<div class="col-md-12"><label class="labels">Address Line 2</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Postcode</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">State</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Area</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
+                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="enter email id" value=""></div>
+                    <div class="col-md-12"><label class="labels">Education</label><input type="text" class="form-control" placeholder="education" value=""></div>*@
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="@Model.Description" value=""></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="state"></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+                <div class="col-md-12"><label class="labels">Experience in Designing</label><input type="text" class="form-control" placeholder="experience" value=""></div> <br>
+                <div class="col-md-12"><label class="labels">Additional Details</label><input type="text" class="form-control" placeholder="additional details" value=""></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>

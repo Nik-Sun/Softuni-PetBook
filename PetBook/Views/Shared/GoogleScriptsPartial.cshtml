@@ -1,0 +1,3 @@
+﻿@inject IConfiguration config
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@config.GetSection("GoogleApiKey").Value&libraries=marker,places&v=beta" defer></script>

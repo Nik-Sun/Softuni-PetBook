@@ -22,8 +22,6 @@ namespace PetBook.Core.Services
         public async Task<string> Upload(string bucketName,Stream data)
         {
             var endpoint = configuration.GetSection("MinioCreds:Endpoint").Value;
-            var accessKey = configuration.GetSection("MinioCreds:AccessKey").Value;
-            var secretKey = configuration.GetSection("MinioCreds:SecretKey").Value;
             var fileName = $"{Guid.NewGuid()}.jpg";
          
             var objectName = fileName;
@@ -48,7 +46,7 @@ namespace PetBook.Core.Services
             catch (MinioException e )
             {
                 Console.WriteLine("File Upload Error: {0}", e.Message);
-                return @"http://localhost/pet-images/noImage.jpg";
+                return @$"{endpoint}/pet-images/noImage.jpg";
             }
 
         }

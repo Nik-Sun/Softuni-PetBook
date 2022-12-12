@@ -1,4 +1,5 @@
-﻿@model PetBrowseModel
+﻿@using System.Security.Claims
+@model PetBrowseModel
 
 <div class="py-5">
 
@@ -10,14 +11,16 @@
             <form asp-controller="Pet" asp-action="Search">
                 <div class="bg-white">
                     <span class="text-danger" asp-validation-for="Criteria"></span>
+                    <span class="text-danger" id="alt-search-val"></span>
                     <span asp-validation-for="Search" class="text-danger"></span>
                 </div>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <select onchange="populateSearchField(event)" asp-for="Criteria">
+                <select asp-for="Criteria">
                     <option selected="" disabled hidden>Search By</option>
                     <option value="breed">Breed</option>
                     <option value="size">Size</option>
                     <option value="ownerName">Owner Name</option>
+                    <option value="petName">Pet Name</option>
                 </select>
 
                 <input id="search-box" aria-required="true" asp-for="Search" type="text" />
@@ -39,11 +42,11 @@
             {
                 if (Model.IsSearch)
                 {
-                    <h2 class="align-content-center">Your search did not return any results!</h2>
+                    <h2 class="text-center">Your search did not return any results!</h2>
                 }
                 else
                 {
-                    <h2 class="align-content-center">No Pets added yet!</h2>
+                    <h2 class="text-center">No Pets added yet!</h2>
                 }
 
             }
@@ -58,14 +61,17 @@
                                     <a class="btn btn-light btn-square mx-1" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id"><div class="bi bi-search"></div></a>
                                     @if (pet.CanLike)
                                     {
-                                        <button onclick="addLike(event)" class="btn btn-light btn-square mx-1" id="@pet.Id"><div class="bi bi-heart"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
+                                        <button id="like-btn" class="btn btn-light btn-square mx-1" data-id="@pet.Id"><div class="bi bi-heart"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
                                     }
                                     else
                                     {
-                                        <button class="btn btn-light btn-square mx-1" disabled id="@pet.Id"><div class="bi bi-heart-fill"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
+                                        <button id="like-btn" class="btn btn-light btn-square mx-1" disabled id="@pet.Id"><div class="bi bi-heart-fill"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
                                     }
-
-                                    <button class="btn btn-light btn-square mx-1" href="#"><i class="bi bi-linkedin"></i></button>
+                                    @if(pet.OwnerId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                    {
+                                        <a asp-controller="Pet" asp-action="Edit" asp-route-petId="@pet.Id" class="btn btn-light btn-square mx-1"><i class="bi bi-pencil-square"></i></a>
+                                    }
+                                   
                                 </div>
                             </div>
                         </div>
@@ -88,7 +94,7 @@
             }
             else
             {
-                <button id="prev" onclick="changePage(event)" style="margin-inline:50px">&laquo;</button>
+                <button id="prev" style="margin-inline:50px">&laquo;</button>
             }
 
             <div><h4 id="page-number">@Model.Page</h4></div>
@@ -98,13 +104,13 @@
         {
             <button id="prev" disabled style="margin-inline:50px">&laquo;</button>
             <div><h4 id="page-number">@Model.Page</h4></div>
-            <button id="next" onclick="changePage(event)" style="margin-inline:50px">&raquo;</button>
+            <button id="next" style="margin-inline:50px">&raquo;</button>
         }
         else
         {
-            <button id="prev" onclick="changePage(event)" style="margin-inline:50px">&laquo;</button>
+            <button id="prev"  style="margin-inline:50px">&laquo;</button>
             <div><h4 id="page-number">@Model.Page</h4></div>
-            <button id="next" onclick="changePage(event)" style="margin-inline:50px">&raquo;</button>
+            <button id="next" style="margin-inline:50px">&raquo;</button>
         }
 
 
@@ -112,6 +118,7 @@
 
 </div>
 
+<script type="module" src='~/js/browse.js'></script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

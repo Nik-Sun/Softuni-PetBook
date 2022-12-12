@@ -39,8 +39,7 @@
         </div>
 
     </div>
-    <!-- /.row -->
-    <!-- Related Projects Row -->
+    
     <h3 class="my-4">More images of @Model.Name</h3>
 
     <div class="row">
@@ -48,7 +47,7 @@
         {
             <div class="col-md-3 col-sm-6 mb-lg-4 my-class">
                 <a>
-                    <img onmousedown="loadImage(event)" class="img-fluid" src="@Model.Images[i].Url" alt="pet-image">
+                    <img class="img-fluid" src="@Model.Images[i].Url" alt="pet-image">
                 </a>
             </div>
         }
@@ -59,3 +58,4 @@
 
 </div>
 <!-- /.container -->
+<script src="~/js/details.js"></script>

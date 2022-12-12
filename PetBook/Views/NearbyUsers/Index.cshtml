@@ -1,25 +1,51 @@
-﻿<div class="center container">
+﻿@inject IConfiguration config
+
+
+<div class="center container">
     <div class="card">
         <div class="card-header">Nearby users</div>
         <div class="card-body" id="map"></div>
     </div>
   
 </div>
+<div id="modal-one" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog-centered modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change address</h5>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Changing your city will redirect you to a page for changing your address.
+                    Are you sure you want to proceed?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Yes I'm sure'</button>
+                <button type="button" class="btn btn-secondary close" aria-label="Close">No,close diaolog</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <style>
-    .center {
-          margin: auto;
-        width: 50%;
-        border: 3px solid green;
-        padding: 10px;
-    }
+  
 </style>
 
-<script src="https://maps.googleapis.com/maps/api/js?v=beta&key=AIzaSyAZa7jwNGAWgJZ-BbsAId3LPB4Id90WJSE&libraries=marker,places"
-        defer></script>
 
-<script src="~/js/drawMapWithLocations.js"></script>
-<script type="text/javascript">
-    window.addEventListener('load', GetNearbyUsers)
-</script>
+@*@section Scripts{
+    <partial name="GoogleScriptsPartial" />
+}
+*@
+<script type="module" src="~/js/NearbyUsers.js"></script>
+@*<script src="~/js/drawMapWithLocations.js"></script>*@
+@*<script type="text/javascript">
+    window.addEventListener('load',GetNearbyUsers())
+</script>*@
 <script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
 @*&callback=initMap*@

@@ -11,5 +11,7 @@ namespace PetBook.Core.Services
 
         public Task<PetDetailViewModel> GetPetById(string id);
         public Task<PetBrowseModel> SearchPets(string criteria,string search,string userId);
+
+        public Task<PetBrowseModel> GetPetsOwnedByUser(string userId);
     }
 }

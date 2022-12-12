@@ -13,6 +13,10 @@ namespace PetBook.Core.Models.User
         [StringLength(50, MinimumLength = 2, ErrorMessage = "must be between 2 and 50 symbols.")]
         public string LastName { get; set; } = null!;
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = "field is required.")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "must be between 2 and 50 symbols.")]
+        public string Username { get; set; }
+
         [EmailAddress]
         [Required(AllowEmptyStrings = false, ErrorMessage = "field is required.")]
         public string Email { get; set; } = null!;

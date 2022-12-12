@@ -31,5 +31,8 @@ namespace PetBook.Core.Models.User
 
         public IFormFile? ProfilePicture { get; set; }
         public string? ProfilePictureUrl { get; set; }
+
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

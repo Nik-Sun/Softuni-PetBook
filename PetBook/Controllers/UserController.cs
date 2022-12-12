@@ -5,7 +5,7 @@ using PetBook.Core.Models.User;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
 using System.Security.Claims;
-using static System.Net.Mime.MediaTypeNames;
+
 using static PetBook.Infrastructure.Data.DataConstants.UserConstants;
 
 namespace PetBook.Controllers
@@ -63,13 +63,13 @@ namespace PetBook.Controllers
             model.Cities = await userService.GetCitiesAsync();
             return View(model);
         }
-      
+
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-           
-            
+
+
             if (ModelState.IsValid == false)
             {
                 model.Cities = await userService.GetCitiesAsync();
@@ -88,8 +88,8 @@ namespace PetBook.Controllers
                     Lattitude = model.Latitude,
                     Longitude = model.Longitude
                 },
-                UserName = model.FirstName,
-                Image =new Infrastructure.Data.Models.Image()
+                UserName = model.Username,
+                Image = new Infrastructure.Data.Models.Image()
                 {
                     Url = DefaultImageUrl
                 }
@@ -102,6 +102,8 @@ namespace PetBook.Controllers
                 foreach (var err in result.Errors)
                 {
                     ModelState.AddModelError("", err.Description);
+                    model.Cities = await userService.GetCitiesAsync();
+
                 }
                 return View(model);
             }
@@ -131,7 +133,7 @@ namespace PetBook.Controllers
                     Email = user.Email,
                     Cities = await userService.GetCitiesAsync(),
                     ProfilePictureUrl = user.ProfilePictureUrl
-                    
+
                 };
                 return View(currentUser);
             }
@@ -152,14 +154,19 @@ namespace PetBook.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfilePicture(IFormFile image)
         {
-
-            
             using (var reader = image.OpenReadStream())
             {
                 string url = await imageService.Upload("temp", reader);
                 return Ok(JsonConvert.SerializeObject(url));
             }
+        }
 
+        [HttpGet]
+        [Route("Api/CheckUsername/{username?}")]
+        public async Task<IActionResult> IsUsernameTaken([FromRoute]string username)
+        {
+           bool isAvaliable = await userService.CheckUsernameAvailability(username);
+            return Ok(isAvaliable);
         }
       
     }
