@@ -6,6 +6,7 @@ using PetBook.Core.Repositories;
 using PetBook.Infrastructure.Data.Models;
 
 using static PetBook.Infrastructure.Data.DataConstants.MinioBuckets;
+using static PetBook.Infrastructure.Data.DataConstants.PetConstants;
 namespace PetBook.Core.Services
 {
     public class PetService : IPetService
@@ -36,10 +37,10 @@ namespace PetBook.Core.Services
 
             foreach (var img in model.Images)
             {
-                
+
                 pet.Images.Add(new Image()
                 {
-                    Url = await imageService.Upload(PetBucket,img.OpenReadStream())
+                    Url = await imageService.Upload(PetBucket, img.OpenReadStream())
                 });
             }
 
@@ -69,15 +70,19 @@ namespace PetBook.Core.Services
         public async Task<PetDetailViewModel> GetPetById(string id)
         {
             var petId = Guid.Parse(id);
+
             var pet = await repo.All<Pet>().Where(p => p.Id == petId)
                 .Include(o => o.Owner)
                 .Include(b => b.Breed)
                 .Include(i => i.Images)
+                .Include(p => p.LikedBy)
                 .FirstOrDefaultAsync();
+
             if (pet == null)
             {
                 throw new ArgumentException("Id");
             }
+
             return new PetDetailViewModel()
             {
                 Name = pet.Name,
@@ -94,7 +99,9 @@ namespace PetBook.Core.Services
                 Size = GetSize(pet.Weight),
                 Id = pet.Id,
                 Height = pet.Height,
-                Weight = pet.Weight
+                Weight = pet.Weight,
+                Age = pet.Age,
+                Likes = pet.LikedBy.Count()
             };
         }
 
@@ -220,6 +227,83 @@ namespace PetBook.Core.Services
             var model = await GetBrowseModelAsync(pets, userId);
 
             return model;
+        }
+
+        public async Task EditPet(PetEditModel model)
+        {
+            Guid id;
+            if (Guid.TryParse(model.Id, out id))
+            {
+                var pet = await repo.GetByIdAsync<Pet>(id);
+                pet.Name = model.Name;
+                pet.Age = model.Age;
+                pet.Description = model.Description;
+                pet.Height = model.Height;
+                pet.Weight = model.Weight;
+                foreach (var image in model.Images)
+                {
+                    using (var stream = image.OpenReadStream())
+                    {
+                        pet.Images.Add(new Image()
+                        {
+                            Url = await imageService.Upload(PetBucket, stream)
+                        });
+                    }
+                }
+                await repo.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> ImageLimitReached(string petId, int uploadedImagesCount)
+        {
+            Guid id;
+            if (Guid.TryParse(petId,out id))
+            {
+                int count =  await repo.AllReadonly<Pet>(p => p.Id == id)
+                    .Select(p => p.Images.Count())
+                    .FirstAsync();
+                if (count > MaxPetImagesCount)
+                {
+                    return true;
+                }
+
+            }
+           return false;
+        }
+
+        public async Task DeletePet(string petId)
+        {
+            Guid id;
+
+            if (Guid.TryParse(petId,out id))
+            {
+                var pet = await repo.All<Pet>(p => p.Id == id)
+                    .Include(p => p.Images)
+                    .FirstOrDefaultAsync();
+                
+                if (pet != null)
+                {
+                    repo.Delete(pet);
+
+                    await repo.SaveChangesAsync();
+                    return;
+                }
+            }
+            throw new ArgumentException(petId);
+        }
+
+        public async Task DeleteImage(string imageId)
+        {
+            int id;
+            if (int.TryParse(imageId,out id))
+            {
+                var image =await repo.GetByIdAsync<Image>(id);
+                repo.Delete(image);
+                await repo.SaveChangesAsync();
+                return;
+            }
+            throw new ArgumentException("Id");
+           
         }
     }
 }

@@ -12,7 +12,10 @@
         public static class PetConstants
         {
             public const int NameMaxLength = 20;
-            public const int DescriptionMaxLength = 5000; 
+            public const int DescriptionMaxLength = 5000;
+
+            public const int MaxPetImageFileSize = 5 * 1024 * 1024;
+            public const int MaxPetImagesCount = 12;
         }
         public static class CityConstants
         {

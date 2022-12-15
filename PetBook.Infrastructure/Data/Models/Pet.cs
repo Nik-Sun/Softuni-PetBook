@@ -10,7 +10,7 @@ namespace PetBook.Infrastructure.Data.Models
 
         public Pet()
         {
-            Images = new List<Image>();
+            Images = new HashSet<Image>();
         }
 
         [Key]

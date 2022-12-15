@@ -42,6 +42,38 @@ body {
 .my-class {
     transition: all .2s ease-in-out;
 }
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    background-color: black;
+    color: white;
+    top: 0;
+    left: 0;
+    
+}
+
+#zoom:hover #tooltip {
+    opacity: 0.5;
+   
+}
  .my-class:hover{
      transform: scale(1.2);
  }

@@ -283,6 +283,9 @@
 .bg-offer {
     background: url(../img/offer.jpg) top right no-repeat;
     background-size: cover;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    filter: blur(5px);
 }
 
 .price-carousel::after {

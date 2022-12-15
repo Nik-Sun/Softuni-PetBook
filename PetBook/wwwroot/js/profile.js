@@ -1,4 +1,5 @@
-﻿import {getCityData,initMapReg } from './initMapReg.js'
+﻿import { getCityData, initMapReg } from './initMapReg.js'
+import {displayModal,hideModal } from './modal.js'
 const basePath = document.location.protocol + '//' + document.location.host + '/';
 document.getElementById('profile-pic-container').addEventListener('click', uploadImage);
 const uploadUrl = `${basePath}User/UpdateProfilePicture`;
@@ -47,20 +48,7 @@ function uploadImage() {
     })
 }
 
-function displayModal(modal) {
-   
-    modal.classList.add('fade')
-    modal.classList.replace('modal', 'modal-open')
-    setTimeout(() => modal.classList.add('show'), 20)
 
-}
-function hideModal(modal) {
-    modal.classList.remove('show');
-    setTimeout(() => {
-        modal.classList.remove('fade')
-        modal.classList.replace('modal-open', 'modal')
-    }, 150)
-}
 
 async function changeAddress(e) {
     if (e) {
@@ -99,4 +87,3 @@ async function changeAddress(e) {
     document.querySelector('.btn-close').addEventListener('click', () => {
         hideModal(modal)
     })
-}

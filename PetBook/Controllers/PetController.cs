@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PetBook.Core.Models.Pets;
 using PetBook.Core.Services;
 using System.Security.Claims;
@@ -85,8 +86,78 @@ namespace PetBook.Controllers
 
         public async Task<IActionResult> Edit(string petId)
         {
+            if (TempData.Any())
+            {
+                foreach (var err in TempData.Keys)
+                {
+                    ModelState.AddModelError("", TempData[err] as string);
+                }
+               
+            }
             var model = await petService.GetPetById(petId);
-            return View(model);
+
+            var editModel = new PetEditModel()
+            {
+                Id = model.Id.ToString(),
+                Description = model.Description,
+                Age = model.Age,
+                Weight = model.Weight,
+                Height = model.Height,
+                Breed = model.Breed,
+                Size = model.Size,
+                ImageViewModels = model.Images,
+                IsMale = model.IsMale,
+                Likes = model.Likes,
+                Name = model.Name
+            };
+            return View(editModel);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PetEditModel model)
+        {
+
+            if (ModelState.IsValid == false)
+            {
+                foreach (var value in ModelState.Values)
+                {
+                    
+                    if (value.ValidationState == ModelValidationState.Invalid)
+                    {
+                        for (int i = 0; i < value.Errors.Count; i++)
+                        {
+                            TempData.Add($"Error [{new Random().Next()}]", value.Errors[i].ErrorMessage);
+                        }
+                    }
+                    
+                }
+               
+            }
+            bool limit = await petService.ImageLimitReached(model.Id, model.Images.Count);
+
+            if (limit)
+            {
+                TempData.Add($"Error [{new Random().Next()}]", "You cannot upload more than 12 images");
+            }
+            else
+            {
+                await petService.EditPet(model);
+            }
+
+            return RedirectToAction(nameof(Edit), new { petId = model.Id });
+
+        }
+
+        public async Task<IActionResult> Delete(string petId)
+        {
+            await petService.DeletePet(petId);
+            return RedirectToAction(nameof(MyPets));
+        }
+        public async Task<IActionResult> DeleteImage(string imageId,string petId)
+        {
+            await petService.DeleteImage(imageId);
+            return RedirectToAction(nameof(Edit),new {petId = petId });
         }
     }
 }
