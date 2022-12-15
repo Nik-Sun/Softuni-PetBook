@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PetBook.Core.Services;
 using PetBook.Infrastructure.Data.Models;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace PetBook.Controllers
 {
+    [Authorize]
     public class MessageController : Controller
     {
         private readonly UserManager<User> userManager;

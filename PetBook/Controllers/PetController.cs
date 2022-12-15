@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PetBook.Core.Models.Pets;
 using PetBook.Core.Services;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 
 namespace PetBook.Controllers
 {
+    [Authorize]
     public class PetController : Controller
     {
         private readonly IPetService petService;
@@ -86,6 +88,7 @@ namespace PetBook.Controllers
 
         public async Task<IActionResult> Edit(string petId)
         {
+         
             if (TempData.Any())
             {
                 foreach (var err in TempData.Keys)
@@ -95,6 +98,11 @@ namespace PetBook.Controllers
                
             }
             var model = await petService.GetPetById(petId);
+
+            if (User.FindFirstValue(ClaimTypes.NameIdentifier) != model.OwnerId)
+            {
+                return BadRequest();
+            }
 
             var editModel = new PetEditModel()
             {

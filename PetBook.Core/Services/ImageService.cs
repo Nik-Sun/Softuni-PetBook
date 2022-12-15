@@ -1,73 +1,56 @@
-﻿using Microsoft.Extensions.Configuration;
-using Minio;
-using Minio.Exceptions;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+
 
 namespace PetBook.Core.Services
 {
     public class ImageService : IImageService
     {
-        private readonly IConfiguration configuration;
-        private readonly MinioClient client;
 
-        public ImageService(IConfiguration _configuration)
+        private readonly Cloudinary client;
+
+        public ImageService(Cloudinary _client)
         {
-            configuration = _configuration;
-            client = new MinioClient()
-              .WithEndpoint(configuration.GetSection("MinioCreds:Endpoint").Value)
-              .WithCredentials(configuration.GetSection("MinioCreds:AccessKey").Value
-              , configuration.GetSection("MinioCreds:SecretKey").Value)
-              .Build();
+            client = _client;
         }
 
-        public async Task<string> Upload(string bucketName,Stream data)
+        public async Task<string> Upload(Stream data)
         {
-            var endpoint = configuration.GetSection("MinioCreds:Endpoint").Value;
-            var fileName = $"{Guid.NewGuid()}.jpg";
-         
-            var objectName = fileName;
-            var contentType = "image/jpeg";
-            try
-            {
-               
-              
-                var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(bucketName)
-                    .WithObject(fileName)
-                    .WithStreamData(data)
-                    .WithObjectSize(data.Length)
-                    .WithContentType(contentType);
-                   
+            ImageUploadResult result;
+            ImageUploadParams parameters;
 
-                await client.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
-                Console.WriteLine("Successfully uploaded " + objectName);
-
-                return $"http://{endpoint}/{bucketName}/{fileName}";
-            }
-            catch (MinioException e )
+            using (data)
             {
-                Console.WriteLine("File Upload Error: {0}", e.Message);
-                return @$"{endpoint}/pet-images/noImage.jpg";
+                parameters = new ImageUploadParams()
+                {
+                    File = new FileDescription("file", data),
+                    PublicId = $"{Guid.NewGuid()}"
+
+                };
+
+                result = await client.UploadAsync(parameters);
+
             }
 
+            return result.Url.ToString();
         }
 
 
-        public async Task Delete(string bucketName,string imageName)
+        public async Task Delete(string imageUrl)
         {
-            try
+            var id = imageUrl.Split("/").Last().Split(".").FirstOrDefault();
+            if (id != null)
             {
-                RemoveObjectArgs rmArgs = new RemoveObjectArgs()
-                                              .WithBucket(bucketName)
-                                              .WithObject(imageName);
-                await client.RemoveObjectAsync(rmArgs);
-                Console.WriteLine($"successfully removed {bucketName}/{imageName}");
+                var delParams = new DeletionParams(id)
+                {
+                    Invalidate = true
+                };
+                await client.DestroyAsync(delParams);
+
             }
-            catch (MinioException e)
-            {
-                Console.WriteLine("Error: " + e);
-            }
+
         }
 
-       
+
     }
 }

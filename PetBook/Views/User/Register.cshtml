@@ -6,9 +6,12 @@
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-lg-8 col-xl-6">
                     <div class="card rounded-3">
-                        <img src="~/resources/img/team-3.jpg"
-                             class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
-                             alt="Sample photo">
+                        @*<div>
+                            <img src="~/resources/img/team-3.jpg"
+                                 class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                                 alt="Sample photo">
+                        </div>*@
+                       
                         <div class="card-body p-4 p-md-5" id="form-first-part">
                             <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registration Info</h3>
 
@@ -18,11 +21,13 @@
                                 <input type="text" class="form-control" asp-for="FirstName" />
                                 <label class="form-label" asp-for="FirstName">First Name</label>
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
-                            <div class="form-outline mb-4">
+
                                 <input type="text" class="form-control" asp-for="LastName" />
                                 <label class="form-label" asp-for="LastName">Last Name</label>
                                 <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-outline mb-4">
+                            
                             </div>
                             <div class="form-outline mb-4">
                                 <input type="text" class="form-control" asp-for="Username" />
@@ -51,12 +56,12 @@
 
 
                             <div class="form-outline mb-4">
-                                <input type="" asp-for="Password" class="form-control" />
+                                <input type="password" asp-for="Password" class="form-control" />
                                 <label class="form-label" for="form3Example1w">Password</label>
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                             <div class="form-outline mb-4">
-                                <input type="" asp-for="ConfirmPassword" class="form-control" />
+                                <input type="password" asp-for="ConfirmPassword" typ class="form-control" />
                                 <label class="form-label" for="form3Example1w">Confirm Password</label>
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>

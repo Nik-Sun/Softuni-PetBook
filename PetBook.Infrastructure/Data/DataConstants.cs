@@ -7,7 +7,7 @@
             public const int FirstNameMaxLength = 50;
             public const int LastNameMaxLength = 50;
             public const int AddressMaxLength = 100;
-            public const string DefaultImageUrl = "http://localhost:9000/user-images/no-picture.jpg";
+            public const string DefaultImageUrl = "https://res.cloudinary.com/ddhwtoy0m/image/upload/v1671105363/no-picture_qptkg5.jpg";
         }
         public static class PetConstants
         {

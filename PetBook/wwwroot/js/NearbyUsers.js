@@ -61,7 +61,7 @@ function createMarkers(data) {
             map: map,
             position: pos,
             content: pinView.element,
-            title: `${data[i].petName}`
+            title: `${data[i].username}`
         });
 
         marker.addListener("click", (event) => {
@@ -69,7 +69,7 @@ function createMarkers(data) {
             if (infoWindow) {
                 infoWindow.close();
             }
-            infoWindow.setContent(data[i].petName);
+            infoWindow.setContent(marker.title);
             infoWindow.open(marker.map, marker);
         });
         markers.push(marker);

@@ -52,34 +52,55 @@
             }
             @foreach (var pet in Model.Pets)
             {
+                
                 <div class="col-md-4 pb-4">
                     <div class="team-item">
                         <div class="position-relative overflow-hidden">
-                            <img class="img-fluid w-100" style="height:30vh" src="@pet.Images[0].Url" alt="pet-image">
+                            @if (pet.Images.Any())
+                            {
+                                <img class="img-fluid w-100" style="height:30vh" src="@pet.Images[0].Url" alt="pet-image">
+                            }
+                            else
+                            {
+                                <img class="img-fluid w-100" style="height:30vh" src="https://res.cloudinary.com/ddhwtoy0m/image/upload/v1671102519/noImage_a4lixj.jpg" alt="pet-image">
+                            }
+                           
                             <div class="team-overlay">
                                 <div class="d-flex align-items-center justify-content-start">
                                     <a class="btn btn-light btn-square mx-1" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id"><div class="bi bi-search"></div></a>
-                                    @if (pet.CanLike)
+                                    @if (pet.CanLike && pet.IsMine == false)
                                     {
                                         <button id="like-btn" class="btn btn-light btn-square mx-1" data-id="@pet.Id"><div class="bi bi-heart"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
+                                    }
+                                    else if (pet.IsMine)
+                                    {
+                                        <a asp-controller="Pet" asp-action="Edit" asp-route-petId="@pet.Id" class="btn btn-light btn-square mx-1"><i class="bi bi-pencil-square"></i></a>
                                     }
                                     else
                                     {
                                         <button id="like-btn" class="btn btn-light btn-square mx-1" disabled id="@pet.Id"><div class="bi bi-heart-fill"><div class="badge bg-success float-right">@pet.Likes</div></div></button>
                                     }
-                                    @if(pet.OwnerId == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                                    {
-                                        <a asp-controller="Pet" asp-action="Edit" asp-route-petId="@pet.Id" class="btn btn-light btn-square mx-1"><i class="bi bi-pencil-square"></i></a>
-                                    }
                                    
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-light text-center p-4">
-                            <h5 class="text-uppercase">@pet.Name</h5>
-                            <h5 class="text-uppercase fw-bold">@(pet.IsMale ? Html.Raw("&#9794 Boy") : Html.Raw("&#9792 Girl"))</h5>
-                            <p class="m-0">Owner: @pet.Owner</p>
-                        </div>
+                        @if (pet.IsMine)
+                        {
+                            <div class="bg-warning text-center p-4">
+                                <h5 class="text-uppercase">@pet.Name</h5>
+                                <h5 class="text-uppercase fw-bold">@(pet.IsMale ? Html.Raw("&#9794 Boy") : Html.Raw("&#9792 Girl"))</h5>
+                                <p class="m-0">Owner: @pet.Owner</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="bg-light text-center p-4">
+                                <h5 class="text-uppercase">@pet.Name</h5>
+                                <h5 class="text-uppercase fw-bold">@(pet.IsMale ? Html.Raw("&#9794 Boy") : Html.Raw("&#9792 Girl"))</h5>
+                                <p class="m-0">Owner: @pet.Owner</p>
+                            </div>
+                        }
+                       
                     </div>
                 </div>
             }

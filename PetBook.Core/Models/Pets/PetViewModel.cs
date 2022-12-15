@@ -17,5 +17,6 @@ namespace PetBook.Core.Models.Pets
         public string OwnerId { get; set; }
         public int Likes { get; set; }
         public bool CanLike { get; set; }
+        public bool IsMine { get; set; }
     }
 }

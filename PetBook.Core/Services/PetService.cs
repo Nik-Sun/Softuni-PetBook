@@ -37,10 +37,9 @@ namespace PetBook.Core.Services
 
             foreach (var img in model.Images)
             {
-
                 pet.Images.Add(new Image()
                 {
-                    Url = await imageService.Upload(PetBucket, img.OpenReadStream())
+                    Url = await imageService.Upload(img.OpenReadStream())
                 });
             }
 
@@ -205,8 +204,8 @@ namespace PetBook.Core.Services
                       Name = p.Name,
                       IsMale = p.IsMale,
                       Likes = p.LikedBy.Count(),
-                      CanLike = p.LikedBy.Any(l => (l.UserId == userId)) == false &&
-                      p.OwnerId != userId,
+                      CanLike = p.LikedBy.Any(l => (l.UserId == userId)) == false,
+                      IsMine = p.OwnerId == userId,
                       Images = p.Images.Select(i => new ImageViewModel()
                       {
                           Id = i.Id.ToString(),
@@ -246,7 +245,7 @@ namespace PetBook.Core.Services
                     {
                         pet.Images.Add(new Image()
                         {
-                            Url = await imageService.Upload(PetBucket, stream)
+                            Url = await imageService.Upload(stream)
                         });
                     }
                 }
@@ -279,12 +278,18 @@ namespace PetBook.Core.Services
             {
                 var pet = await repo.All<Pet>(p => p.Id == id)
                     .Include(p => p.Images)
+                    .Include(p => p.LikedBy)
                     .FirstOrDefaultAsync();
                 
                 if (pet != null)
                 {
+                    repo.DeleteRange<Image>(pet.Images);
+                    repo.DeleteRange<Like>(pet.LikedBy);
                     repo.Delete(pet);
-
+                    foreach (var image in pet.Images)
+                    {
+                        await imageService.Delete(image.Url);
+                    }
                     await repo.SaveChangesAsync();
                     return;
                 }
@@ -298,7 +303,9 @@ namespace PetBook.Core.Services
             if (int.TryParse(imageId,out id))
             {
                 var image =await repo.GetByIdAsync<Image>(id);
+                var imageUrl = image.Url;
                 repo.Delete(image);
+                await imageService.Delete(imageUrl);
                 await repo.SaveChangesAsync();
                 return;
             }

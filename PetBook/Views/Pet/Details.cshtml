@@ -14,7 +14,15 @@
     <div class="row">
 
         <div class="col-md-8">
-            <img id="main" class="img-fluid" src="@Model.Images[0].Url" alt="pet-image">
+            @if (Model.Images.Any())
+            {
+                <img id="main" class="img-fluid" src="@Model.Images[0].Url" alt="pet-image">
+            }
+            else
+            {
+                <img id="main" class="img-fluid" src="https://res.cloudinary.com/ddhwtoy0m/image/upload/v1671102519/noImage_a4lixj.jpg" alt="pet-image">
+            }
+            
         </div>
 
         <div class="col-md-4">

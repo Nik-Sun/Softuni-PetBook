@@ -34,7 +34,7 @@ const validate = {
             if (val.includes('/')) {
                 return false
             }
-           return fetch(`${basePath}/Api/CheckUsername/${val}`)
+           return fetch(`${basePath}Api/CheckUsername/${val}`)
                 .then(res => res.json())
                 .then(result => result)
                 .catch(e => console.log(e))

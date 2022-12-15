@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetBook.Core.Models.User;
 using PetBook.Core.Services;
 using System.Security.Claims;
 
 namespace PetBook.Controllers
 {
+    [Authorize]
     public class NearbyUsersController : Controller
     {
         private readonly IUserService userService;

@@ -94,19 +94,16 @@ namespace PetBook.Core.Services
                 user.Address.AddressText = model.Address;
                 user.Address.Longitude = model.Longitude;
                 user.Address.Lattitude = model.Latitude;
+                user.Address.CityId = model.CityId;
 
                 if (model.ProfilePicture != null)
                 {
                     var oldImageUrl = user.Image.Url;
                     if (oldImageUrl != DefaultImageUrl)
                     {
-                        
-                        string imageName = oldImageUrl
-                            .Split("/",StringSplitOptions.RemoveEmptyEntries)
-                            .Last();
-                        await imageService.Delete("user-images", imageName);
+                        await imageService.Delete(oldImageUrl);
                     }
-                    var imageUrl = await imageService.Upload("user-images", model.ProfilePicture.OpenReadStream());
+                    var imageUrl = await imageService.Upload(model.ProfilePicture.OpenReadStream());
                     user.Image = new Image()
                     {
                         Url = imageUrl

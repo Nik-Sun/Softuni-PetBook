@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Minio.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace PetBook.Core.Services
 {
     public interface IImageService
     {
-        public Task<string> Upload(string bucketName, Stream data);
-        public Task Delete(string bucketName, string imageName);
+        public Task<string> Upload(Stream data);
+        public Task Delete(string imageUrl);
     }
 }

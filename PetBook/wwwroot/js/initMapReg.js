@@ -15,9 +15,6 @@ async function getCityData(cityId) {
 }
 
 
-
-
-
 /**
  * 
  * @param {{lat:number,lng:number}} cityData
@@ -69,7 +66,7 @@ function initMapReg(cityData) {
             })
 
             const autocomplete = new google.maps.places.Autocomplete(autocompleteInput, {
-                fields: [/*"address_components",*/ "geometry", "name"],
+                fields: ["address_components", "geometry", "name"],
                 types: ["address"],
                 bounds: defaultBounds
             });

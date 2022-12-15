@@ -1,11 +1,11 @@
 ﻿import { getCityData, initMapReg } from './initMapReg.js'
-import {displayModal,hideModal } from './modal.js'
+import { displayModal, hideModal } from './modal.js'
 const basePath = document.location.protocol + '//' + document.location.host + '/';
 document.getElementById('profile-pic-container').addEventListener('click', uploadImage);
 const uploadUrl = `${basePath}User/UpdateProfilePicture`;
 const selectCity = document.getElementById('select-city');
 selectCity.addEventListener('change', cityChanged);
-document.querySelector('#change-address-btn').addEventListener('click',changeAddress)
+document.querySelector('#change-address-btn').addEventListener('click', changeAddress)
 
 
 function uploadImage() {
@@ -35,14 +35,14 @@ function uploadImage() {
             });
     })
 }
- function cityChanged() {
+function cityChanged() {
     let modal = document.getElementById('modal-one');
     displayModal(modal)
     modal.querySelectorAll('.close').forEach(e => e.addEventListener('click', () => {
         hideModal(modal)
         selectCity.selectedIndex = 0;
     }))
-    modal.querySelector('.btn-primary').addEventListener('click',async () => {
+    modal.querySelector('.btn-primary').addEventListener('click', async () => {
         await hideModal(modal)
         changeAddress()
     })
@@ -59,11 +59,11 @@ async function changeAddress(e) {
     console.log(cityId);
     let cityData = await getCityData(cityId)
     console.log(cityData);
-    
+
     let modal = document.querySelector('#modal-map')
     displayModal(modal)
     initMapReg(cityData)
-    
+
     document.querySelector('#autocomp-support-form').addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -87,3 +87,4 @@ async function changeAddress(e) {
     document.querySelector('.btn-close').addEventListener('click', () => {
         hideModal(modal)
     })
+}

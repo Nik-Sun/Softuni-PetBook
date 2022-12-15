@@ -1,4 +1,7 @@
 
+using CloudinaryDotNet;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PetBook.Core.Repositories;
 using PetBook.Core.Services;
@@ -6,8 +9,16 @@ using PetBook.Hubs;
 using PetBook.Infrastructure.Data;
 using PetBook.Infrastructure.Data.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
+Account account = new Account(
+  builder.Configuration.GetSection("Cloudinary:CloudName").Value,
+  builder.Configuration.GetSection("Cloudinary:ApiKey").Value,
+  builder.Configuration.GetSection("Cloudinary:ApiSecret").Value
+ );
+
+Cloudinary cloudinary = new Cloudinary(account);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -17,14 +28,19 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<User>(options => 
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.User.RequireUniqueEmail = true;
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequireNonAlphanumeric = false;
     
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PetBookDbContext>();
+
+builder.Services.AddSingleton(typeof(Cloudinary),cloudinary);
 builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IRepository, PetBookRepository>();
 builder.Services.AddScoped<IPetService, PetService>();

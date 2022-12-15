@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetBook.Core.Services;
 
 namespace PetBook.Controllers
 {
+    
     [ApiController]
     [Route("Api/City")]
     public class CityApiController : Controller
